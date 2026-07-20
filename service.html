@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Services | Design Plus Assam</title>
+<link rel="icon" href="images/site/favicon.png">
+<link rel="stylesheet" href="css/style.css?v=137">
+</head>
+<body data-page="service">
+
+<header id="site-header" data-include="header.html"></header>
+
+<section class="hero hero-sm" id="top">
+  <div class="hero-slide active" style="background-image:url('images/site/features.jpg')"></div>
+  <div class="hero-content">
+    <div class="eyebrow">What We Offer</div>
+    <h1>Our Services</h1>
+    <div class="breadcrumb"><a href="index.php">Home</a> / <span>Our Services</span></div>
+  </div>
+</section>
+
+<section class="svc-billboard-room">
+  <div class="svc-ceiling">
+    <div class="svc-light"></div>
+    <div class="svc-light"></div>
+    <div class="svc-light"></div>
+    <div class="svc-light"></div>
+  </div>
+
+  <div class="svc-wall">
+    <div class="billboard-wrap">
+
+      <!-- Spotlights -->
+      <div class="bb-spot bb-spot-l"></div>
+      <div class="bb-spot bb-spot-r"></div>
+
+      <!-- Billboard frame -->
+      <div class="billboard" id="billboard">
+        <div class="bb-screen" id="bbScreen">
+
+          <div class="bb-panel active" data-index="0">
+            <div class="bb-panel-inner">
+              <span class="bb-num">01</span>
+              <h3>Architectural Consultancy</h3>
+              <h4>Turning dreams into ideal concrete structures.</h4>
+              <p>Consulting an architect is the first step in building a residential or commercial building. Architectural consultancy enables one to build a dream project within budget while keeping every safety concern in mind &mdash; attractively designed and highly practical, using deep technical knowledge at each stage to ensure sustainability.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="1">
+            <div class="bb-panel-inner">
+              <span class="bb-num">02</span>
+              <h3>Structural Consultancy</h3>
+              <h4>Structural design for residential and commercial buildings.</h4>
+              <p>Turning dreams into tangible structures through concept planning carried out by a highly professional and experienced team. Every environmental factor is carefully inspected to ensure resistance, durability, sustainability and safety, using reliable materials and construction techniques.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="2">
+            <div class="bb-panel-inner">
+              <span class="bb-num">03</span>
+              <h3>Interior Design Consultancy</h3>
+              <h4>Aesthetic and purposeful interior design ideas.</h4>
+              <p>Advising and recommending innovative ideas to design the interior space of buildings, personalized to each client's taste and preferences &mdash; attractive spaces delivered within budget-friendly services.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="3">
+            <div class="bb-panel-inner">
+              <span class="bb-num">04</span>
+              <h3>Landscapes</h3>
+              <h4>Visually appealing and eco-friendly landscapes.</h4>
+              <p>Offering landscape services from the planning of a design through to proper execution, using traditional and modern techniques suited to the environment, with priority placed on conservation and mitigating pollution.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="4">
+            <div class="bb-panel-inner">
+              <span class="bb-num">05</span>
+              <h3>Renovation</h3>
+              <h4>Reviving and breathing new life into buildings.</h4>
+              <p>Providing technical solutions to renovate and repair a project to achieve the desired outcome &mdash; a detailed assessment of current conditions, an appropriate budget, and proper risk assessment of the demolition process.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="5">
+            <div class="bb-panel-inner">
+              <span class="bb-num">06</span>
+              <h3>Master Planning</h3>
+              <h4>A complete framework for the project.</h4>
+              <p>Developing a plan for the entire project, listing every detail. Budget, structural requirements, scheduled time and other design options are all taken into consideration to anticipate predictable outcomes and avoid unforeseen circumstances.</p>
+            </div>
+          </div>
+
+          <div class="bb-panel" data-index="6">
+            <div class="bb-panel-inner">
+              <span class="bb-num">07</span>
+              <h3>Vastu Remedies</h3>
+              <h4>Guidelines for a healthy and peaceful abode.</h4>
+              <p>Bringing mental peace, happiness, prosperity and good fate in a pleasant atmosphere. Rules are laid down for the design and construction of buildings to bring harmony between man and his environment.</p>
+            </div>
+          </div>
+
+        </div><!-- /bb-screen -->
+
+        <!-- corner bulbs -->
+        <div class="bb-bulb bb-bulb-tl"></div>
+        <div class="bb-bulb bb-bulb-tr"></div>
+        <div class="bb-bulb bb-bulb-bl"></div>
+        <div class="bb-bulb bb-bulb-br"></div>
+      </div><!-- /billboard -->
+
+      <!-- Support poles -->
+      <div class="bb-pole bb-pole-l"></div>
+      <div class="bb-pole bb-pole-r"></div>
+
+      <!-- Dots nav -->
+      <div class="bb-dots" id="bbDots"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const panels = Array.from(document.querySelectorAll('.bb-panel'));
+  const dotsEl = document.getElementById('bbDots');
+  const billboard = document.getElementById('billboard');
+  const total = panels.length;
+  let current = 0;
+  let timer;
+
+  // Build dots
+  panels.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'bb-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Service ' + (i+1));
+    d.addEventListener('click', () => { goTo(i); resetTimer(); });
+    dotsEl.appendChild(d);
+  });
+
+  function flicker(cb) {
+    billboard.classList.add('bb-flickering');
+    // Rapid flicker sequence then swap
+    setTimeout(() => {
+      billboard.classList.remove('bb-flickering');
+      cb();
+    }, 600);
+  }
+
+  function goTo(idx) {
+    if (idx === current) return;
+    flicker(() => {
+      panels[current].classList.remove('active');
+      dotsEl.children[current].classList.remove('active');
+      current = (idx + total) % total;
+      panels[current].classList.add('active');
+      dotsEl.children[current].classList.add('active');
+    });
+  }
+
+  function next() { goTo((current + 1) % total); }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, 4500);
+  }
+
+  resetTimer();
+})();
+</script>
+
+<section class="cta-band">
+  <div class="container reveal">
+    <h2>Not sure which service you need?</h2>
+    <p>Talk to our team and we'll help you scope the right approach for your project.</p>
+    <a href="contact.html" class="btn btn-solid">Consult Now</a>
+  </div>
+</section>
+
+<footer id="site-footer" data-include="footer.html"></footer>
+<script src="js/main.js?v=35"></script>
+</body>
+</html>

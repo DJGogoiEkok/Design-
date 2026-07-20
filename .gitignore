@@ -1,0 +1,17 @@
+# macOS metadata
+._*
+.DS_Store
+__MACOSX/
+
+# Cache files
+cache_*
+
+# PHP session/cache
+*.cache
+
+# Editor
+.vscode/
+*.swp
+
+# Large binary assets — upload separately or via FTP
+images/

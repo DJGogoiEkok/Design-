@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | Design Plus Assam</title>
+<link rel="icon" href="images/site/favicon.png">
+<link rel="stylesheet" href="css/style.css?v=136">
+</head>
+<body data-page="portfolio">
+
+<header id="site-header" data-include="header.html"></header>
+
+<section class="hero hero-sm" id="top">
+  <div class="hero-slide active" style="background-image:url('images/site/portfolio-bg.jpg')"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="sketch-highlight" style="padding: 0 10px;">Our Work</span></div>
+    <h1><span class="sketch-highlight" style="padding: 0 15px;">Portfolio</span></h1>
+    <div class="breadcrumb"><span class="sketch-highlight" style="padding: 5px 15px;"><a href="index.php">Home</a> / <span>Portfolio</span></span></div>
+    <div class="portfolio-hero-cat"><span class="sketch-highlight" style="padding: 4px 14px;">Browse By Category</span></div>
+  </div>
+</section>
+
+<section class="gallery-wall-section">
+  <div class="gallery-wall">
+    <div class="gallery-pole-row">
+      <div class="gallery-pole">
+        <div class="pole-bracket pole-bracket-l"></div>
+        <div class="pole-bracket pole-bracket-r"></div>
+      </div>
+    </div>
+
+    <div class="gallery-carousel">
+      <button class="gc-prev" aria-label="Previous">&#8592;</button>
+      <div class="gallery-frames" id="galleryFrames">
+        <a class="gallery-frame" href="apartments.html">
+          <div class="frame-mount">
+            <img src="images/portfolio/ap1.jpg" alt="Apartments" loading="lazy">
+            <div class="frame-label"><span class="frame-count">18 Projects</span><h4>Apartments</h4></div>
+          </div>
+        </a>
+        <a class="gallery-frame" href="commercial.html">
+          <div class="frame-mount">
+            <img src="images/portfolio/comm1.jpg" alt="Commercial" loading="lazy">
+            <div class="frame-label"><span class="frame-count">17 Projects</span><h4>Commercial</h4></div>
+          </div>
+        </a>
+        <a class="gallery-frame" href="interior.html">
+          <div class="frame-mount">
+            <img src="images/portfolio/int1.jpeg" alt="Interior" loading="lazy">
+            <div class="frame-label"><span class="frame-count">10 Projects</span><h4>Interior</h4></div>
+          </div>
+        </a>
+        <a class="gallery-frame" href="residential.html">
+          <div class="frame-mount">
+            <img src="images/portfolio/res1.jpg" alt="Residences" loading="lazy">
+            <div class="frame-label"><span class="frame-count">23 Projects</span><h4>Residences</h4></div>
+          </div>
+        </a>
+        <a class="gallery-frame" href="others.html">
+          <div class="frame-mount">
+            <img src="images/portfolio/oth1.png" alt="Others" loading="lazy">
+            <div class="frame-label"><span class="frame-count">4 Projects</span><h4>Others</h4></div>
+          </div>
+        </a>
+        <a class="gallery-frame" href="portfolio-details.html">
+          <div class="frame-mount">
+            <img src="images/site/features.jpg" alt="More" loading="lazy">
+            <div class="frame-label"><span class="frame-count">Coming Soon</span><h4>Institutional &amp; More</h4></div>
+          </div>
+        </a>
+      </div>
+      <button class="gc-next" aria-label="Next">&#8594;</button>
+    </div>
+
+    <div class="gc-dots" id="gcDots"></div>
+  </div>
+</section>
+
+<footer id="site-footer" data-include="footer.html"></footer>
+<script src="js/main.js?v=35"></script>
+<script>
+(function(){
+  const frames = Array.from(document.querySelectorAll('.gallery-frame'));
+  const dotsEl = document.getElementById('gcDots');
+  const perPage = 3;
+  const pages = Math.ceil(frames.length / perPage);
+  let current = 0;
+
+  for(let i = 0; i < pages; i++){
+    const d = document.createElement('button');
+    d.className = 'gc-dot';
+    d.setAttribute('aria-label', 'Page ' + (i+1));
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(page){
+    current = (page + pages) % pages;
+    frames.forEach((f, i) => {
+      f.style.display = (Math.floor(i / perPage) === current) ? 'flex' : 'none';
+    });
+    document.querySelectorAll('.gc-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  document.querySelector('.gc-prev').addEventListener('click', () => goTo(current - 1));
+  document.querySelector('.gc-next').addEventListener('click', () => goTo(current + 1));
+
+  goTo(0);
+})();
+</script>
+</body>
+</html>

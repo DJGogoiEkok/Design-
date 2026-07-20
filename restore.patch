@@ -1,0 +1,107 @@
+--- index.php
++++ index.php
+@@ -126,6 +126,27 @@
+         <div class="image-item" id="type-3-img">
+           <img src="images/site/proj_commercial.jpg" alt="Commercial" loading="lazy">
+         </div>
++        <div class="image-item" id="type-4-img">
++          <img src="images/site/proj_institutional.jpg" alt="Institutional" loading="lazy">
++        </div>
++        <div class="image-item" id="type-5-img">
++          <img src="images/site/proj_township.jpg" alt="Township" loading="lazy">
++        </div>
++        <div class="image-item" id="type-6-img">
++          <img src="images/site/proj_hospitality.jpg" alt="Hospitality" loading="lazy">
++        </div>
++        <div class="image-item" id="type-7-img">
++          <img src="images/site/proj_healthcare.jpg" alt="Health Care" loading="lazy">
++        </div>
++        <div class="image-item" id="type-8-img">
++          <img src="images/site/proj_interior.jpg" alt="Interior" loading="lazy">
++        </div>
++        <div class="image-item" id="type-9-img">
++          <img src="images/site/proj_religious.jpg" alt="Religious" loading="lazy">
++        </div>
++        <div class="image-item" id="type-10-img">
++          <img src="images/site/proj_others.jpg" alt="Others" loading="lazy">
++        </div>
+       </div>
+ 
+       <!-- Right side (now texts) -->
+@@ -174,6 +195,62 @@
+             <p>Careful planning and execution to help clients achieve their business goals with class commercial buildings.</p>
+           </div>
+         </div>
++        <div class="text-item" data-target="type-4">
++          <span class="num">04</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Institutional</h3>
++            <p>Specialized planning, design, construction and post-construction for a wide range of institutional needs.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-5">
++          <span class="num">05</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Township</h3>
++            <p>Large-scale housing complexes with schools, hospitals, malls and recreation for modern living.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-6">
++          <span class="num">06</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Hospitality</h3>
++            <p>Luxury resorts and grand hotels featuring the best amenities with budget-conscious construction.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-7">
++          <span class="num">07</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Health Care</h3>
++            <p>Healthcare buildings built with the latest technologies and methods for patient safety and comfort.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-8">
++          <span class="num">08</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Interior</h3>
++            <p>Aesthetic interior design for commercial and residential buildings, with meticulous attention to finishing.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-9">
++          <span class="num">09</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Religious</h3>
++            <p>Sacred community structures approached with respect, careful planning and reverence for tradition.</p>
++          </div>
++        </div>
++        <div class="text-item" data-target="type-10">
++          <span class="num">10</span>
++          <div class="text-content">
++            <span>Project Type</span>
++            <h3>Others</h3>
++            <p>Custom project types tailored to specific customer needs and requirements.</p>
++          </div>
++        </div>
+       </div>
+       
+     </div>
+@@ -183,6 +260,13 @@
+       <div class="scroll-trigger" id="type-1"></div>
+       <div class="scroll-trigger" id="type-2"></div>
+       <div class="scroll-trigger" id="type-3"></div>
++      <div class="scroll-trigger" id="type-4"></div>
++      <div class="scroll-trigger" id="type-5"></div>
++      <div class="scroll-trigger" id="type-6"></div>
++      <div class="scroll-trigger" id="type-7"></div>
++      <div class="scroll-trigger" id="type-8"></div>
++      <div class="scroll-trigger" id="type-9"></div>
++      <div class="scroll-trigger" id="type-10"></div>
+     </div>
+   </div>
+ </section>
