@@ -7,6 +7,69 @@
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
 <style>
+/* ═══════════ PHOTO GALLERY GRID ═══════════ */
+.studio-gallery {
+  padding: 70px 0 80px;
+  background: #ffffff;
+  overflow: hidden;
+}
+.pg-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 30px; margin-bottom: 34px;
+}
+.pg-pill {
+  display: inline-block; padding: 7px 18px; border-radius: 999px;
+  border: 1px solid #e4e2de; background: #faf9f7;
+  font-size: 0.82rem; font-weight: 600; color: #4a4a4f; letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+.pg-head h2 {
+  font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 800; color: #16151a;
+  line-height: 0.98; margin: 0; letter-spacing: -0.03em;
+}
+.pg-head-note {
+  color: #8a8a90; font-size: 0.95rem; line-height: 1.5; text-align: right;
+  flex-shrink: 0; margin: 0 0 8px;
+}
+
+/* mosaic grid */
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 200px;
+  gap: 16px;
+}
+.pg-item {
+  overflow: hidden; border-radius: 16px; background: #f0eee9;
+}
+.pg-item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .6s cubic-bezier(.22,1,.36,1);
+}
+.pg-item:hover img { transform: scale(1.05); }
+
+.pg-g1 { grid-column: span 2; grid-row: span 2; }   /* big wide */
+.pg-g2 { grid-column: 3;      grid-row: span 2; }   /* tall right */
+.pg-g3 { grid-column: 1;      grid-row: span 2; }   /* portrait */
+.pg-g4 { grid-column: 2;      grid-row: span 2; }   /* portrait */
+.pg-g5 { grid-column: 3;      grid-row: span 2; }   /* portrait */
+.pg-g6 { grid-column: 1;      grid-row: span 1; }   /* wide short */
+.pg-g7 { grid-column: span 2; grid-row: span 1; }   /* wide short */
+
+@media (max-width: 760px) {
+  .pg-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .pg-head-note { text-align: left; }
+  .pg-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; }
+  .pg-g1 { grid-column: span 2; grid-row: span 2; }
+  .pg-g2 { grid-column: 1; grid-row: span 2; }
+  .pg-g3 { grid-column: 2; grid-row: span 2; }
+  .pg-g4 { grid-column: 1; grid-row: span 2; }
+  .pg-g5 { grid-column: 2; grid-row: span 2; }
+  .pg-g6 { grid-column: 1; grid-row: span 1; }
+  .pg-g7 { grid-column: 2; grid-row: span 1; }
+}
+/* ═══════════ end photo gallery grid ═══════════ */
+
 .about-sketch-wrap {
   display: flex;
   align-items: center;
@@ -23,8 +86,7 @@
   height: auto;
   display: block;
   border-radius: 12px;
-  /* wash out lines so only the warm 3D model shows clearly */
-  filter: brightness(1.18) contrast(0.72) saturate(1.1);
+  opacity: 0;
 }
 #sketchCanvas {
   position: absolute;
@@ -66,21 +128,24 @@
   </div>
 </section>
 
-<section class="section-alt">
+<section class="studio-gallery">
   <div class="container">
-    <div class="section-title reveal">
-      <div class="eyebrow">Our Space</div>
-      <h2>Inside Our Studios</h2>
+    <div class="pg-head reveal">
+      <div class="pg-head-left">
+        <span class="pg-pill">Our Space</span>
+        <h2>Inside Our Studios</h2>
+      </div>
+      <p class="pg-head-note">Captured moments from our studios<br>across Assam — where every project begins.</p>
     </div>
-    <div class="gallery-grid reveal">
-      <img src="images/team/ofc-1.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-2.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-3.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-4.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-5.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-6.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-7.jpg" alt="Office" loading="lazy">
-      <img src="images/team/ofc-8.jpg" alt="Office" loading="lazy">
+
+    <div class="pg-grid reveal">
+      <div class="pg-item pg-g1"><img src="images/team/ofc-1.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g2"><img src="images/team/ofc-2.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g3"><img src="images/team/ofc-3.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g4"><img src="images/team/ofc-4.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g5"><img src="images/team/ofc-5.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g6"><img src="images/team/ofc-6.jpg" alt="Studio" loading="lazy"></div>
+      <div class="pg-item pg-g7"><img src="images/team/ofc-7.jpg" alt="Studio" loading="lazy"></div>
     </div>
   </div>
 </section>
@@ -97,6 +162,80 @@
 <script src="js/main.js?v=31"></script>
 <script>
 (function(){
+  // Each set = [tall, hero-photo, wide-a, small]
+  const allImgs = [
+    ['images/team/ofc-1.jpg','images/team/ofc-3.jpg','images/team/ofc-5.jpg','images/team/ofc-7.jpg'],
+    ['images/team/ofc-2.jpg','images/team/ofc-4.jpg','images/team/ofc-6.jpg','images/team/ofc-8.jpg'],
+    ['images/team/ofc-8.jpg','images/team/ofc-6.jpg','images/team/ofc-4.jpg','images/team/ofc-2.jpg'],
+    ['images/team/ofc-7.jpg','images/team/ofc-5.jpg','images/team/ofc-3.jpg','images/team/ofc-1.jpg'],
+  ];
+
+  const stage = document.getElementById('billboardStage');
+  const dotsEl = document.getElementById('billDots');
+  if(!stage) return;
+
+  const imgs = [
+    document.getElementById('billImg1'),
+    document.getElementById('billImg2'),
+    document.getElementById('billImg3'),
+    document.getElementById('billImg4'),
+  ];
+
+  const SETS = allImgs.length;
+  let current = 0;
+
+  // Build dots
+  for(let i = 0; i < SETS; i++){
+    const d = document.createElement('button');
+    d.className = 'billboard-dot' + (i===0?' active':'');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(idx){
+    if(idx === current) return;
+    current = (idx + SETS) % SETS;
+    imgs.forEach((img, fi) => {
+      img.classList.add('swapping');
+      setTimeout(() => {
+        img.src = allImgs[current][fi];
+        img.classList.remove('swapping');
+      }, 350);
+    });
+    document.querySelectorAll('.billboard-dot').forEach((d,i) => d.classList.toggle('active', i===current));
+  }
+
+  // Scroll-triggered advance — initialise lastScrollY AFTER first paint
+  let lastScrollY = window.scrollY;
+  const SCROLL_THRESHOLD = 200;
+  let accumulated = 0;
+  let ticking = false;
+  let ready = false;
+  // delay ready so initial scroll-to-view doesn't count
+  setTimeout(() => { lastScrollY = window.scrollY; ready = true; }, 600);
+
+  window.addEventListener('scroll', () => {
+    if(!ready || ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const rect = stage.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+      if(inView){
+        const delta = window.scrollY - lastScrollY;
+        accumulated += delta;
+        if(Math.abs(accumulated) >= SCROLL_THRESHOLD){
+          goTo(current + (accumulated > 0 ? 1 : -1));
+          accumulated = 0;
+        }
+      }
+      lastScrollY = window.scrollY;
+      ticking = false;
+    });
+  });
+})();
+</script>
+<script>
+(function(){
   const img = document.getElementById('sketchImg');
   const canvas = document.getElementById('sketchCanvas');
   if(!img || !canvas) return;
@@ -105,73 +244,75 @@
     const w = img.naturalWidth, h = img.naturalHeight;
     canvas.width = w; canvas.height = h;
 
-    // Extract line pixels (dark pixels) from the image
-    const off = document.createElement('canvas');
-    off.width = w; off.height = h;
-    const offCtx = off.getContext('2d');
-    offCtx.drawImage(img, 0, 0);
-    const src = offCtx.getImageData(0, 0, w, h).data;
-
-    // Build lines-only pixel array
-    const linesArr = new Uint8ClampedArray(w * h * 4);
-    for(let i = 0; i < src.length; i += 4){
-      const brightness = (src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114);
-      if(brightness < 160){
-        linesArr[i]   = src[i];
-        linesArr[i+1] = src[i+1];
-        linesArr[i+2] = src[i+2];
-        linesArr[i+3] = Math.round((1 - brightness / 160) * 255);
-      }
-    }
-    const linesImg = new ImageData(linesArr, w, h);
-
-    // Render lines to an offscreen canvas
-    const linesOff = document.createElement('canvas');
-    linesOff.width = w; linesOff.height = h;
-    linesOff.getContext('2d').putImageData(linesImg, 0, 0);
-
     const ctx = canvas.getContext('2d');
-    let sweep = 0;
-    const total = w + h;
-    const speed = total / 180; // ~3s at 60fps
+    const STROKES = 60;           // number of horizontal brush strokes
+    const DURATION = 3000;        // ms for full draw-in
+    const HOLD = 2200;            // ms to hold after complete
+    const FADE = 800;             // ms fade out
 
-    function draw(){
-      ctx.clearRect(0, 0, w, h);
-      ctx.save();
-      // Diagonal sweep clip (top-left to bottom-right)
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(sweep, 0);
-      ctx.lineTo(sweep - h, h);
-      ctx.lineTo(0, h);
-      ctx.closePath();
-      ctx.clip();
-      ctx.drawImage(linesOff, 0, 0);
-      ctx.restore();
+    // Each stroke: { y, delay, speed (pixels/ms) }
+    const strokes = Array.from({length: STROKES}, (_, i) => ({
+      y: Math.round((i / STROKES) * h),
+      h: Math.ceil(h / STROKES) + 1,
+      delay: (i / STROKES) * DURATION * 0.6 + Math.random() * 120,
+      speed: w / (DURATION * 0.55 + Math.random() * 200)
+    }));
 
-      sweep += speed;
-      if(sweep < total + h){
-        requestAnimationFrame(draw);
-      } else {
-        // Hold full lines, then fade out and restart
-        ctx.drawImage(linesOff, 0, 0);
-        setTimeout(function(){
-          let alpha = 1;
-          function fadeOut(){
-            ctx.clearRect(0, 0, w, h);
-            ctx.globalAlpha = alpha;
-            ctx.drawImage(linesOff, 0, 0);
-            ctx.globalAlpha = 1;
-            alpha -= 0.02;
-            if(alpha > 0) requestAnimationFrame(fadeOut);
-            else { sweep = 0; requestAnimationFrame(draw); }
-          }
-          fadeOut();
-        }, 1800);
+    let startTime = null;
+    let phase = 'draw'; // draw → hold → fade → draw
+    let fadeStart = null;
+    let alpha = 1;
+
+    function render(ts){
+      if(!startTime) startTime = ts;
+      const elapsed = ts - startTime;
+
+      if(phase === 'draw'){
+        ctx.clearRect(0, 0, w, h);
+        let allDone = true;
+        strokes.forEach(s => {
+          const t = elapsed - s.delay;
+          if(t <= 0){ allDone = false; return; }
+          const x = Math.min(t * s.speed, w);
+          if(x < w) allDone = false;
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(0, s.y, x, s.h);
+          ctx.clip();
+          ctx.drawImage(img, 0, 0, w, h);
+          ctx.restore();
+        });
+        if(allDone){
+          phase = 'hold';
+          ctx.drawImage(img, 0, 0, w, h);
+          setTimeout(() => { phase = 'fade'; fadeStart = null; requestAnimationFrame(render); }, HOLD);
+          return;
+        }
+      } else if(phase === 'fade'){
+        if(!fadeStart) fadeStart = ts;
+        alpha = 1 - (ts - fadeStart) / FADE;
+        if(alpha <= 0){
+          ctx.clearRect(0, 0, w, h);
+          alpha = 1;
+          phase = 'draw';
+          startTime = null;
+          strokes.forEach(s => {
+            s.delay = (strokes.indexOf(s) / STROKES) * DURATION * 0.6 + Math.random() * 120;
+            s.speed = w / (DURATION * 0.55 + Math.random() * 200);
+          });
+          requestAnimationFrame(render);
+          return;
+        }
+        ctx.clearRect(0, 0, w, h);
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.drawImage(img, 0, 0, w, h);
+        ctx.globalAlpha = 1;
       }
+
+      requestAnimationFrame(render);
     }
 
-    draw();
+    requestAnimationFrame(render);
   }
 
   if(img.complete && img.naturalWidth) init();

@@ -6,6 +6,55 @@
 <title>Our Team | Design Plus Assam</title>
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
+<style>
+/* ═══════════ TEAM — BOARD OF DIRECTORS CARDS ═══════════ */
+.team-board { padding: 70px 0 80px; background: #fff; text-align: center; }
+.tb-title {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem); font-weight: 800; color: #16151a;
+  letter-spacing: -0.02em; margin: 0 0 44px;
+}
+.tb-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+}
+.bod-card {
+  container-type: inline-size; margin: 0;
+}
+.bod-inner {
+  position: relative; aspect-ratio: 3 / 4.3;
+  background: linear-gradient(158deg, #E5433E 0%, #CE2A32 55%, #B81F2C 100%);
+  border-radius: 72px 14px 18px 18px;
+  overflow: hidden;
+  box-shadow: 0 22px 40px -22px rgba(190,30,45,.6);
+}
+.bod-water {
+  position: absolute; left: 3%; top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-size: 9cqw; font-weight: 800; letter-spacing: 0.06em;
+  color: rgba(255,255,255,.16); white-space: nowrap; z-index: 0;
+  user-select: none;
+}
+/* photo fills the TOP-RIGHT — red shows as an L on the left + bottom */
+.bod-inner img {
+  position: absolute; left: 22%; top: 0; width: 78%; height: 76%;
+  object-fit: cover; object-position: top center; z-index: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+}
+.bod-inner figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 14px 20px 22px; text-align: left;
+}
+.bod-inner figcaption b { display: block; color: #fff; font-size: 6cqw; font-weight: 800; line-height: 1.1; }
+.bod-inner figcaption span { display: block; color: rgba(255,255,255,.82); font-size: 3.4cqw; margin-top: 3px; }
+.tb-note {
+  max-width: 860px; margin: 40px auto 0; color: #666; font-size: 0.95rem; line-height: 1.6;
+}
+
+@media (max-width: 860px) { .tb-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+@media (max-width: 460px) { .tb-grid { grid-template-columns: 1fr 1fr; gap: 14px; } }
+/* ═══════════ end board of directors ═══════════ */
+</style>
 </head>
 <body data-page="about">
 
@@ -20,69 +69,84 @@
   </div>
 </section>
 
-<section>
+<section class="team-board">
   <div class="container">
-    <div class="section-title reveal">
-      <div class="eyebrow">Key Members</div>
-      <h2>The Design Team</h2>
+    <h2 class="tb-title reveal">The Design Team</h2>
+
+    <div class="tb-grid reveal">
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Architect</span>
+          <img src="images/team/9.jpg" alt="Rajneesh Dutta" loading="lazy">
+          <figcaption><b>Rajneesh Dutta</b><span>Founder Architect</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Design Head</span>
+          <img src="images/team/2.jpg" alt="Rupjyoti Nazir Dutta" loading="lazy">
+          <figcaption><b>Rupjyoti N. Dutta</b><span>Cofounder &amp; Design Head</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Architect</span>
+          <img src="images/team/3.jpg" alt="Kushan Neog" loading="lazy">
+          <figcaption><b>Kushan Neog</b><span>Associate Architect</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Architect</span>
+          <img src="images/team/4.jpg" alt="Pranay Kaushik" loading="lazy">
+          <figcaption><b>Pranay Kaushik</b><span>Associate Architect</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Interior</span>
+          <img src="images/team/5.jpg" alt="Drisha Bordoloi" loading="lazy">
+          <figcaption><b>Drisha Bordoloi</b><span>Interior Designer</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Engineer</span>
+          <img src="images/team/6.jpg" alt="Sujata Newar" loading="lazy">
+          <figcaption><b>Sujata Newar</b><span>Civil Engineer</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Engineer</span>
+          <img src="images/team/7.jpg" alt="Bhaskar Borah" loading="lazy">
+          <figcaption><b>Bhaskar Borah</b><span>Junior Engineer, Civil</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Interior</span>
+          <img src="images/team/8.jpg" alt="Rishabh Bordoloi" loading="lazy">
+          <figcaption><b>Rishabh Bordoloi</b><span>Interior Designer</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Architect</span>
+          <img src="images/team/1.jpg" alt="Eliza Das" loading="lazy">
+          <figcaption><b>Eliza Das</b><span>Junior Architect</span></figcaption>
+        </div>
+      </figure>
+      <figure class="bod-card">
+        <div class="bod-inner">
+          <span class="bod-water">Site</span>
+          <img src="images/team/10.jpg" alt="Subhojit Neogi" loading="lazy">
+          <figcaption><b>Subhojit Neogi</b><span>Site Supervisor</span></figcaption>
+        </div>
+      </figure>
     </div>
-    <div class="team-grid reveal">
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/1.jpg" alt="Rajneesh Dutta" loading="lazy"></div>
-        <h4>Rajneesh Dutta</h4>
-        <div class="role">Proprietor &amp; Founder Architect</div>
-        <div class="cred">B.Arch, Approved Valuer, AIIA, AIIV</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/2.jpg" alt="Rupjyoti Nazir Dutta" loading="lazy"></div>
-        <h4>Rupjyoti Nazir Dutta</h4>
-        <div class="role">Cofounder &amp; Design Head</div>
-        <div class="cred">B.Arch, PGDUP</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/3.jpg" alt="Kushan Neog" loading="lazy"></div>
-        <h4>Kushan Neog</h4>
-        <div class="role">Associate Architect</div>
-        <div class="cred">B.Arch</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/4.jpg" alt="Pranay Kaushik" loading="lazy"></div>
-        <h4>Pranay Kaushik</h4>
-        <div class="role">Associate Architect</div>
-        <div class="cred">B.Arch</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/5.jpg" alt="Drisha Bordoloi" loading="lazy"></div>
-        <h4>Drisha Bordoloi</h4>
-        <div class="role">Interior Designer</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/6.jpg" alt="Sujata Newar" loading="lazy"></div>
-        <h4>Sujata Newar</h4>
-        <div class="role">Civil Engineer</div>
-        <div class="cred">BE, Civil</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/7.jpg" alt="Bhaskar Borah" loading="lazy"></div>
-        <h4>Bhaskar Borah</h4>
-        <div class="role">Junior Engineer, Civil</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/8.jpg" alt="Rishabh Bordoloi" loading="lazy"></div>
-        <h4>Rishabh Bordoloi</h4>
-        <div class="role">Interior Designer</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/9.jpg" alt="Eliza Das" loading="lazy"></div>
-        <h4>Eliza Das</h4>
-        <div class="role">Junior Architect</div>
-      </div>
-      <div class="team-card">
-        <div class="team-photo"><img src="images/team/10.jpg" alt="Subhojit Neogi" loading="lazy"></div>
-        <h4>Subhojit Neogi</h4>
-        <div class="role">Site Supervisor</div>
-      </div>
-    </div>
+
+    <p class="tb-note reveal">The architects, engineers and designers behind Design Plus — a decade of shaping homes, commercial landmarks and institutions across Assam, delivered with honest budgets and meticulous care.</p>
   </div>
 </section>
 
