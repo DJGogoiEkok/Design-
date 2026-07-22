@@ -6,6 +6,34 @@
 <title>About Us | Design Plus Assam</title>
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
+<style>
+.about-sketch-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sketch-spinner {
+  flex-shrink: 0;
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+}
+.sketch-house {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  /* wash out lines so only the warm 3D model shows clearly */
+  filter: brightness(1.18) contrast(0.72) saturate(1.1);
+}
+#sketchCanvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 12px;
+  pointer-events: none;
+}
+</style>
 </head>
 <body data-page="about">
 
@@ -20,10 +48,13 @@
   </div>
 </section>
 
-<section>
+<section style="background: rgb(248, 252, 255);">
   <div class="container about-grid">
-    <div class="about-media reveal">
-      <img src="images/site/about.jpg" alt="Design Plus team at work">
+    <div class="about-media reveal about-sketch-wrap">
+      <div class="sketch-spinner">
+        <img src="images/site/AVout.webp" alt="Design Plus architectural sketch" class="sketch-house" id="sketchImg" crossorigin="anonymous">
+        <canvas id="sketchCanvas"></canvas>
+      </div>
     </div>
     <div class="reveal">
       <div class="eyebrow">Who We Are</div>
@@ -64,5 +95,88 @@
 
 <footer id="site-footer" data-include="footer.html"></footer>
 <script src="js/main.js?v=31"></script>
+<script>
+(function(){
+  const img = document.getElementById('sketchImg');
+  const canvas = document.getElementById('sketchCanvas');
+  if(!img || !canvas) return;
+
+  function init(){
+    const w = img.naturalWidth, h = img.naturalHeight;
+    canvas.width = w; canvas.height = h;
+
+    // Extract line pixels (dark pixels) from the image
+    const off = document.createElement('canvas');
+    off.width = w; off.height = h;
+    const offCtx = off.getContext('2d');
+    offCtx.drawImage(img, 0, 0);
+    const src = offCtx.getImageData(0, 0, w, h).data;
+
+    // Build lines-only pixel array
+    const linesArr = new Uint8ClampedArray(w * h * 4);
+    for(let i = 0; i < src.length; i += 4){
+      const brightness = (src[i] * 0.299 + src[i+1] * 0.587 + src[i+2] * 0.114);
+      if(brightness < 160){
+        linesArr[i]   = src[i];
+        linesArr[i+1] = src[i+1];
+        linesArr[i+2] = src[i+2];
+        linesArr[i+3] = Math.round((1 - brightness / 160) * 255);
+      }
+    }
+    const linesImg = new ImageData(linesArr, w, h);
+
+    // Render lines to an offscreen canvas
+    const linesOff = document.createElement('canvas');
+    linesOff.width = w; linesOff.height = h;
+    linesOff.getContext('2d').putImageData(linesImg, 0, 0);
+
+    const ctx = canvas.getContext('2d');
+    let sweep = 0;
+    const total = w + h;
+    const speed = total / 180; // ~3s at 60fps
+
+    function draw(){
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      // Diagonal sweep clip (top-left to bottom-right)
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(sweep, 0);
+      ctx.lineTo(sweep - h, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(linesOff, 0, 0);
+      ctx.restore();
+
+      sweep += speed;
+      if(sweep < total + h){
+        requestAnimationFrame(draw);
+      } else {
+        // Hold full lines, then fade out and restart
+        ctx.drawImage(linesOff, 0, 0);
+        setTimeout(function(){
+          let alpha = 1;
+          function fadeOut(){
+            ctx.clearRect(0, 0, w, h);
+            ctx.globalAlpha = alpha;
+            ctx.drawImage(linesOff, 0, 0);
+            ctx.globalAlpha = 1;
+            alpha -= 0.02;
+            if(alpha > 0) requestAnimationFrame(fadeOut);
+            else { sweep = 0; requestAnimationFrame(draw); }
+          }
+          fadeOut();
+        }, 1800);
+      }
+    }
+
+    draw();
+  }
+
+  if(img.complete && img.naturalWidth) init();
+  else img.addEventListener('load', init);
+})();
+</script>
 </body>
 </html>

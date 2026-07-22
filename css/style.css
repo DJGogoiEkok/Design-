@@ -174,30 +174,43 @@ section:last-of-type {
 .circle-btn:hover { background: var(--gold); color: var(--ink); transform: translateX(3px); }
 
 /* ============================================================
-   Header / Nav — CoLabs pill style
+   Header / Nav — iPhone liquid crystal glass
    ============================================================ */
 #site-header {
   position: fixed;
-  top: 22px; left: 22px; right: 22px;
+  top: 16px; left: 16px; right: 16px;
   z-index: 1000;
   padding: 0;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 999px; /* Pill shape like Dynamic Island / iPhone UI */
-  max-width: calc(var(--maxw) + 44px);
+  /* liquid crystal: near-transparent tint, ultra-deep blur, vibrancy */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.08);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.08);
+  border-radius: 999px;
+  max-width: calc(var(--maxw) + 32px);
   margin: 0 auto;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-  transition: padding 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease, border-radius 0.3s ease;
+  /* crystal edge: gradient border simulating light refraction */
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  /* multi-layer shadow: soft ambient + specular top highlight */
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.25) inset,
+    0 1px 0 0 rgba(255,255,255,0.7) inset,
+    0 -1px 0 0 rgba(255,255,255,0.12) inset,
+    0 12px 40px -8px rgba(20, 20, 60, 0.18),
+    0 4px 12px 0 rgba(20, 20, 60, 0.08);
+  transition: background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
 }
 
 #site-header.scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 14px 34px -18px rgba(23, 21, 15, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(56px) saturate(240%) brightness(1.06);
+  -webkit-backdrop-filter: blur(56px) saturate(240%) brightness(1.06);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.35) inset,
+    0 1px 0 0 rgba(255,255,255,0.85) inset,
+    0 -1px 0 0 rgba(255,255,255,0.18) inset,
+    0 18px 48px -10px rgba(20, 20, 60, 0.18),
+    0 6px 16px 0 rgba(20, 20, 60, 0.08);
 }
 
 .nav-wrap {
@@ -2586,7 +2599,7 @@ a.tile:hover .tile-arrow { opacity: 1; transform: translate(0, 0); }
   gap: 30px;
 }
 .client-card {
-  display: none;
+  display: flex;
   position: relative;
   flex-direction: column;
   justify-content: center;
@@ -2594,8 +2607,8 @@ a.tile:hover .tile-arrow { opacity: 1; transform: translate(0, 0); }
   border-radius: 50px;
   height: 80px;
   padding: 0 30px 0 90px;
-  opacity: 0;
-  transform: perspective(1000px) rotateY(-90deg);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 12px 12px 25px rgba(0,0,0,0.3), 
               -8px -8px 20px rgba(53,87,125,0.15),
