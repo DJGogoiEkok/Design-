@@ -34,12 +34,12 @@
   color: rgba(255,255,255,.16); white-space: nowrap; z-index: 0;
   user-select: none;
 }
-/* All photos are 960x720 landscape — fill the full width, top 72% of card */
+/* All photos are 960x720 landscape — photo in top-right, blue L on left + bottom */
 .bod-inner img {
-  position: absolute; left: 0; top: 0; width: 100%; height: 72%;
+  position: absolute; left: 22%; top: 0; width: 78%; height: 76%;
   object-fit: cover; object-position: top center; z-index: 1;
-  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
 }
 .bod-inner figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
@@ -53,6 +53,17 @@
 
 @media (max-width: 860px) { .tb-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
 @media (max-width: 460px) { .tb-grid { grid-template-columns: 1fr 1fr; gap: 14px; } }
+
+/* Per-card object-position to keep everyone's face centred in the L frame */
+.tb-grid .bod-card:nth-child(2) .bod-inner img { object-position: top 10% right; }
+.tb-grid .bod-card:nth-child(3) .bod-inner img { object-position: top 5% right; }
+.tb-grid .bod-card:nth-child(4) .bod-inner img { object-position: top 5% right; }
+.tb-grid .bod-card:nth-child(5) .bod-inner img { object-position: top 10% right; }
+.tb-grid .bod-card:nth-child(6) .bod-inner img { object-position: top 15% right; }
+.tb-grid .bod-card:nth-child(7) .bod-inner img { object-position: top 5% right; }
+.tb-grid .bod-card:nth-child(8) .bod-inner img { object-position: top 10% right; }
+.tb-grid .bod-card:nth-child(9) .bod-inner img { object-position: top 5% right; }
+.tb-grid .bod-card:nth-child(10) .bod-inner img { object-position: top 5% right; }
 /* ═══════════ end board of directors ═══════════ */
 </style>
 </head>
