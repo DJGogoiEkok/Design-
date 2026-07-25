@@ -6,21 +6,87 @@
 <title>Commercial Portfolio | Design Plus Assam</title>
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
+<style>
+.apt-showcase { padding: 50px 0 60px; overflow: hidden; }
+.stage-wrap { max-width: 820px; margin: 40px auto 0; position: relative; }
+.stage-valance {
+  position: relative; z-index: 6; height: 48px;
+  background: linear-gradient(180deg, #1a1a4e 0%, #12123a 100%);
+  border-radius: 12px 12px 0 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.stage-valance::after {
+  content: '◆  COMMERCIAL  ◆'; color: rgba(255,255,255,0.5);
+  font-size: 0.7rem; letter-spacing: 0.2em; font-weight: 600;
+}
+.stage-valance-drape {
+  position: absolute; bottom: -20px; left: 0; right: 0; z-index: 5; height: 20px;
+  background:
+    radial-gradient(circle at 10% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 30% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 50% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 70% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 90% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px);
+}
+.stage-frame {
+  position: relative; aspect-ratio: 16 / 10; background: #0a0a1a; overflow: hidden;
+  border-left: 6px solid #1a1a4e; border-right: 6px solid #1a1a4e;
+  border-bottom: 6px solid #1a1a4e; border-radius: 0 0 8px 8px;
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.4), inset 0 0 60px rgba(0,0,0,0.5);
+}
+.stage-frame::before {
+  content: ''; position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+  width: 70%; height: 120px;
+  background: radial-gradient(ellipse, rgba(255,240,200,0.15) 0%, transparent 70%);
+  z-index: 4; pointer-events: none;
+}
+.stage-photo { position: absolute; inset: 0; z-index: 1; }
+.stage-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.stage-photo .stage-label {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 50px 28px 22px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  color: #fff; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em; z-index: 3;
+}
+.curtain-left, .curtain-right {
+  position: absolute; top: 0; bottom: 0; width: 52%; z-index: 3;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.curtain-left { left: 0; } .curtain-right { right: 0; }
+.curtain-left .curtain-fabric, .curtain-right .curtain-fabric { width: 100%; height: 100%; position: relative; }
+.curtain-left .curtain-fabric {
+  background: linear-gradient(90deg, #1a1a4e 0%, #1e1e5a 15%, #161648 25%, #1a1a4e 35%, #1e1e5a 50%, #161648 60%, #1a1a4e 70%, #1e1e5a 85%, #161648 100%);
+}
+.curtain-right .curtain-fabric {
+  background: linear-gradient(270deg, #1a1a4e 0%, #1e1e5a 15%, #161648 25%, #1a1a4e 35%, #1e1e5a 50%, #161648 60%, #1a1a4e 70%, #1e1e5a 85%, #161648 100%);
+}
+.curtain-left .curtain-fabric::after, .curtain-right .curtain-fabric::after {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0px, transparent 20px, rgba(0,0,0,0.12) 20px, rgba(0,0,0,0.12) 22px, transparent 22px, transparent 40px);
+}
+.stage-frame.open .curtain-left { transform: translateX(-100%); }
+.stage-frame.open .curtain-right { transform: translateX(100%); }
+.stage-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 24px; }
+.stage-btn {
+  width: 48px; height: 48px; border-radius: 50%; background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.1); color: var(--ink); font-size: 1.2rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+}
+.stage-btn:hover { background: var(--ink); color: #fff; }
+.stage-counter { font-size: 0.85rem; font-weight: 600; color: var(--ink); min-width: 60px; text-align: center; letter-spacing: 0.05em; }
+@media (max-width: 860px) { .stage-wrap { margin: 30px 16px 0; } }
+</style>
 </head>
 <body data-page="portfolio">
-
 <header id="site-header" data-include="header.html"></header>
-
 <section class="hero hero-sm" id="top">
-  <div class="hero-slide active" style="background-image:url('images/site/slider3.jpg')"></div>
+  <div class="hero-slide active" style="background-image:url('images/site/slider1.jpg')"></div>
   <div class="hero-content">
-    <div class="eyebrow">Business</div>
-    <h1>Commercial Spaces</h1>
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="portfolio.html">Portfolio</a> / <span>Commercial</span></div>
+    <div class="eyebrow"><span class="sketch-highlight">Portfolio</span></div>
+    <h1><span class="sketch-highlight">Commercial</span></h1>
+    <div class="breadcrumb"><span class="sketch-highlight" style="padding:4px 15px;"><a href="index.html" style="color:inherit;">Home</a> / <a href="portfolio.html" style="color:inherit;">Portfolio</a> / <span>Commercial</span></span></div>
   </div>
 </section>
-
-<section>
+<section class="apt-showcase">
   <div class="container">
     <div class="cat-pills reveal">
       <a href="apartments.html">Apartments</a>
@@ -28,86 +94,30 @@
       <a href="interior.html">Interior</a>
       <a href="residential.html">Residences</a>
       <a href="others.html">Others</a>
-      <a href="portfolio-details.html">More Categories</a>
     </div>
     <div class="section-title reveal">
       <div class="eyebrow">Portfolio</div>
-      <h2>Commercial Spaces</h2>
-      <p>Dynamic commercial spaces that captivate customers and drive business growth.</p>
+      <h2>Commercial</h2>
+      <p>Commercial spaces designed for impact — retail, office and hospitality projects delivered with precision.</p>
     </div>
-    <div class="portfolio-grid reveal">
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm1.jpg" alt="Commercial 1" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 1</h4></div></div>
+  </div>
+  <div class="stage-wrap reveal">
+    <div class="stage-valance"><div class="stage-valance-drape"></div></div>
+    <div class="stage-frame" id="stageFrame">
+      <div class="stage-photo" id="stagePhoto">
+        <img src="images/portfolio/comm1.jpg" alt="Commercial 1" id="stageImg">
+        <div class="stage-label" id="stageLabel">Commercial 1</div>
       </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm2.jpg" alt="Commercial 2" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 2</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm3.jpg" alt="Commercial 3" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 3</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm4.jpg" alt="Commercial 4" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 4</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm5.jpg" alt="Commercial 5" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 5</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm6.png" alt="Commercial 6" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 6</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm7.jpg" alt="Commercial 7" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 7</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm8.jpg" alt="Commercial 8" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 8</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm9.jpeg" alt="Commercial 9" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 9</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm10.jpeg" alt="Commercial 10" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 10</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm11.png" alt="Commercial 11" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 11</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm12.jpeg" alt="Commercial 12" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 12</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm13.jpeg" alt="Commercial 13" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 13</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm14.jpg" alt="Commercial 14" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 14</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm15.jpg" alt="Commercial 15" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 15</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm16.jpg" alt="Commercial 16" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 16</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/comm17.jpg" alt="Commercial 17" loading="lazy">
-        <div class="overlay"><div><span>Business</span><h4>Commercial 17</h4></div></div>
-      </div>
+      <div class="curtain-left"><div class="curtain-fabric"></div></div>
+      <div class="curtain-right"><div class="curtain-fabric"></div></div>
+    </div>
+    <div class="stage-controls">
+      <button class="stage-btn" id="stagePrev">&#10094;</button>
+      <span class="stage-counter" id="stageCounter">1 / 17</span>
+      <button class="stage-btn" id="stageNext">&#10095;</button>
     </div>
   </div>
 </section>
-
 <section class="cta-band">
   <div class="container reveal">
     <h2>Like what you see?</h2>
@@ -115,8 +125,44 @@
     <a href="contact.html" class="btn btn-solid">Consult Now</a>
   </div>
 </section>
-
 <footer id="site-footer" data-include="footer.html"></footer>
 <script src="js/main.js?v=31"></script>
+<script>
+(function(){
+  const images = [
+    ['images/portfolio/comm1.jpg','Commercial 1'],['images/portfolio/comm2.jpg','Commercial 2'],
+    ['images/portfolio/comm3.jpg','Commercial 3'],['images/portfolio/comm4.jpg','Commercial 4'],
+    ['images/portfolio/comm5.jpg','Commercial 5'],['images/portfolio/comm6.png','Commercial 6'],
+    ['images/portfolio/comm7.jpg','Commercial 7'],['images/portfolio/comm8.jpg','Commercial 8'],
+    ['images/portfolio/comm9.jpeg','Commercial 9'],['images/portfolio/comm10.jpeg','Commercial 10'],
+    ['images/portfolio/comm11.png','Commercial 11'],['images/portfolio/comm12.jpeg','Commercial 12'],
+    ['images/portfolio/comm13.jpeg','Commercial 13'],['images/portfolio/comm14.jpg','Commercial 14'],
+    ['images/portfolio/comm15.jpg','Commercial 15'],['images/portfolio/comm16.jpg','Commercial 16'],
+    ['images/portfolio/comm17.jpg','Commercial 17'],
+  ];
+  const frame=document.getElementById('stageFrame'),img=document.getElementById('stageImg'),
+    label=document.getElementById('stageLabel'),counter=document.getElementById('stageCounter'),
+    total=images.length;
+  let current=0,animating=false;
+  setTimeout(()=>frame.classList.add('open'),400);
+  function goTo(idx){
+    if(animating)return; animating=true;
+    frame.classList.remove('open');
+    setTimeout(()=>{
+      current=((idx%total)+total)%total;
+      img.src=images[current][0]; img.alt=images[current][1];
+      label.textContent=images[current][1];
+      counter.textContent=(current+1)+' / '+total;
+      setTimeout(()=>{ frame.classList.add('open'); setTimeout(()=>{animating=false;},1200); },300);
+    },1200);
+  }
+  document.getElementById('stagePrev').addEventListener('click',()=>goTo(current-1));
+  document.getElementById('stageNext').addEventListener('click',()=>goTo(current+1));
+  let auto=setInterval(()=>goTo(current+1),3000);
+  const wrap=document.querySelector('.stage-wrap');
+  wrap.addEventListener('mouseenter',()=>clearInterval(auto));
+  wrap.addEventListener('mouseleave',()=>{auto=setInterval(()=>goTo(current+1),3000);});
+})();
+</script>
 </body>
 </html>

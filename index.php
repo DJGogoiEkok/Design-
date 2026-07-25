@@ -163,8 +163,8 @@
 <section class="section-alt" id="projects">
   <div class="container">
       <div class="eyebrow">Projects</div>
-      <h2>Types of Projects We Work For</h2>
-      <p>From individual homes to iconic public infrastructure, our team delivers across every building typology.</p>
+      <h2>Designing Across Scales</h2>
+      <p>From bespoke private residences to expansive commercial infrastructure, we bring a unified vision and uncompromising precision to every environment we shape.</p>
   </div>
   <div class="portfolio-split-view" style="border-radius: 0; box-shadow: none; border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05);">
     <div class="portfolio-sticky-container">

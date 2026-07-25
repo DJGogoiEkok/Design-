@@ -6,13 +6,62 @@
 <title>Job Apply | Design Plus Assam</title>
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
+<style>
+/* ═══════════ HERO LIGHT BACKGROUND ═══════════ */
+.hero.hero-light {
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+.hero.hero-light .hero-content {
+  color: #1A365D; /* Dark text for light bg */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 96px; /* Account for the top nav if it was relying on margin-top */
+}
+.job-apply-section {
+  background: url('images/site/job-body-bg-wide.jpg') no-repeat center center !important;
+  background-size: cover !important;
+  padding: 80px 0; /* Add some padding so the network nodes are fully visible above the form */
+  position: relative;
+  overflow: hidden;
+}
+#network-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.job-apply-section .container {
+  position: relative;
+  z-index: 1; /* ensure content sits above the canvas */
+}
+.form-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(26, 54, 93, 0.15);
+  backdrop-filter: blur(5px);
+}
+.hero.hero-light .hero-content h1 {
+  color: #1A365D;
+}
+.hero.hero-light .eyebrow,
+.hero.hero-light .breadcrumb,
+.hero.hero-light .breadcrumb a {
+  color: rgba(26, 54, 93, 0.8);
+}
+</style>
 </head>
 <body data-page="news">
 
 <header id="site-header" data-include="header.html"></header>
 
-<section class="hero hero-sm" id="top">
-  <div class="hero-slide active" style="background-image:url('images/site/intro-bg.jpg')"></div>
+<section class="hero hero-sm hero-light" id="top">
+  <div class="hero-slide active" style="background-image:url('images/site/job-hero-bg-2.png')"></div>
   <div class="hero-content">
     <div class="eyebrow">Careers</div>
     <h1>Job Apply</h1>
@@ -20,7 +69,8 @@
   </div>
 </section>
 
-<section>
+<section class="job-apply-section">
+  <canvas id="network-canvas"></canvas>
   <div class="container">
     <div class="form-card reveal">
       <div class="eyebrow">Join Our Team</div>
@@ -43,5 +93,88 @@
 
 <footer id="site-footer" data-include="footer.html"></footer>
 <script src="js/main.js?v=31"></script>
+<script>
+  // Canvas Network Animation Engine
+  (function() {
+    const canvas = document.getElementById('network-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let particles = [];
+    const numParticles = window.innerWidth < 768 ? 40 : 80;
+    
+    // Config
+    const connectionDistance = 120;
+    const particleSpeed = 0.5;
+    
+    function resize() {
+      width = canvas.width = canvas.parentElement.offsetWidth;
+      height = canvas.height = canvas.parentElement.offsetHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        // spawn mostly in the top half to align with the image's network nodes
+        this.y = Math.random() * (height * 0.6); 
+        this.vx = (Math.random() - 0.5) * particleSpeed;
+        this.vy = (Math.random() - 0.5) * particleSpeed;
+        this.radius = Math.random() * 2 + 1;
+      }
+      
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        // Bounce off edges
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        // Restrict to top 70% of the section so it doesn't overlap the people at the bottom
+        if (this.y < 0 || this.y > height * 0.7) this.vy *= -1;
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(26, 188, 156, 0.6)'; // bright teal/blue matching the image nodes
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < connectionDistance) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            // opacity based on distance
+            const opacity = 1 - (distance / connectionDistance);
+            ctx.strokeStyle = `rgba(26, 188, 156, ${opacity * 0.5})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+</script>
 </body>
 </html>

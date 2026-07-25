@@ -32,41 +32,48 @@
   flex-shrink: 0; margin: 0 0 8px;
 }
 
-/* mosaic grid */
+/* stacked rotating cards */
 .pg-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 200px;
-  gap: 16px;
+  position: relative;
+  width: 700px; height: 820px;
+  margin: 0 auto;
 }
 .pg-item {
-  overflow: hidden; border-radius: 16px; background: #f0eee9;
+  position: absolute;
+  width: 620px; height: 780px;
+  border-radius: 20px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 12px 40px -8px rgba(0,0,0,0.18);
+  transition: transform 0.5s cubic-bezier(.22,1,.36,1), box-shadow 0.4s;
+  cursor: pointer;
+  top: 20px; left: 20px;
 }
 .pg-item img {
   width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .6s cubic-bezier(.22,1,.36,1);
 }
-.pg-item:hover img { transform: scale(1.05); }
+.pg-item:hover {
+  box-shadow: 0 20px 50px -10px rgba(0,0,0,0.25);
+  z-index: 10 !important;
+}
 
-.pg-g1 { grid-column: span 2; grid-row: span 2; }   /* big wide */
-.pg-g2 { grid-column: 3;      grid-row: span 2; }   /* tall right */
-.pg-g3 { grid-column: 1;      grid-row: span 2; }   /* portrait */
-.pg-g4 { grid-column: 2;      grid-row: span 2; }   /* portrait */
-.pg-g5 { grid-column: 3;      grid-row: span 2; }   /* portrait */
-.pg-g6 { grid-column: 1;      grid-row: span 1; }   /* wide short */
-.pg-g7 { grid-column: span 2; grid-row: span 1; }   /* wide short */
+.pg-g1 { transform: rotate(-6deg) translate(-30px, 10px); z-index: 1; }
+.pg-g2 { transform: rotate(4deg) translate(40px, -10px); z-index: 2; }
+.pg-g3 { transform: rotate(-3deg) translate(-10px, 30px); z-index: 3; }
+.pg-g4 { transform: rotate(7deg) translate(20px, 5px); z-index: 4; }
+.pg-g5 { transform: rotate(-5deg) translate(-20px, -15px); z-index: 5; }
+.pg-g6 { transform: rotate(2deg) translate(10px, 20px); z-index: 6; }
+.pg-g7 { transform: rotate(0deg) translate(0px, 0px); z-index: 7; }
+
+.pg-item.fan-out {
+  transition: transform 0.6s cubic-bezier(.22,1,.36,1);
+}
 
 @media (max-width: 760px) {
   .pg-head { flex-direction: column; align-items: flex-start; gap: 14px; }
   .pg-head-note { text-align: left; }
-  .pg-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; }
-  .pg-g1 { grid-column: span 2; grid-row: span 2; }
-  .pg-g2 { grid-column: 1; grid-row: span 2; }
-  .pg-g3 { grid-column: 2; grid-row: span 2; }
-  .pg-g4 { grid-column: 1; grid-row: span 2; }
-  .pg-g5 { grid-column: 2; grid-row: span 2; }
-  .pg-g6 { grid-column: 1; grid-row: span 1; }
-  .pg-g7 { grid-column: 2; grid-row: span 1; }
+  .pg-grid { width: 280px; height: 400px; }
+  .pg-item { width: 250px; height: 360px; }
 }
 /* ═══════════ end photo gallery grid ═══════════ */
 
@@ -317,6 +324,52 @@
 
   if(img.complete && img.naturalWidth) init();
   else img.addEventListener('load', init);
+})();
+</script>
+<script>
+(function(){
+  const cards = [...document.querySelectorAll('.pg-item')];
+  if(!cards.length) return;
+  const positions = [
+    { rotate: -6, x: -30, y: 10 },
+    { rotate: 4,  x: 40,  y: -10 },
+    { rotate: -3, x: -10, y: 30 },
+    { rotate: 7,  x: 20,  y: 5 },
+    { rotate: -5, x: -20, y: -15 },
+    { rotate: 2,  x: 10,  y: 20 },
+    { rotate: 0,  x: 0,   y: 0 },
+  ];
+  let order = cards.map((_,i) => i);
+  function layout(){
+    order.forEach((cardIdx, stackPos) => {
+      const card = cards[cardIdx];
+      const p = positions[stackPos];
+      card.style.zIndex = stackPos + 1;
+      card.style.transform = 'rotate('+p.rotate+'deg) translate('+p.x+'px,'+p.y+'px)';
+    });
+  }
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+      order = order.filter(idx => idx !== i);
+      order.push(i);
+      layout();
+    });
+  });
+  // auto-cycle every 3s
+  let auto = setInterval(() => {
+    const bottom = order.shift();
+    order.push(bottom);
+    layout();
+  }, 3000);
+  const grid = document.querySelector('.pg-grid');
+  grid.addEventListener('mouseenter', () => clearInterval(auto));
+  grid.addEventListener('mouseleave', () => {
+    auto = setInterval(() => {
+      const bottom = order.shift();
+      order.push(bottom);
+      layout();
+    }, 3000);
+  });
 })();
 </script>
 </body>

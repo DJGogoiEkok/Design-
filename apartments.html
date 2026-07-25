@@ -6,6 +6,195 @@
 <title>Apartments Portfolio | Design Plus Assam</title>
 <link rel="icon" href="images/site/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=64">
+<style>
+/* ═══════════ THEATER STAGE PORTFOLIO ═══════════ */
+.apt-showcase {
+  padding: 50px 0 60px;
+  overflow: hidden;
+}
+
+/* — the stage — */
+.stage-wrap {
+  max-width: 820px;
+  margin: 40px auto 0;
+  position: relative;
+}
+
+/* ornate top valance */
+.stage-valance {
+  position: relative;
+  z-index: 6;
+  height: 48px;
+  background: linear-gradient(180deg, #1a1a4e 0%, #12123a 100%);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stage-valance::after {
+  content: '◆  HIGH RISE APARTMENTS  ◆';
+  color: rgba(255,255,255,0.5);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+}
+/* scalloped drape edge */
+.stage-valance-drape {
+  position: absolute;
+  bottom: -20px; left: 0; right: 0;
+  z-index: 5;
+  height: 20px;
+  background:
+    radial-gradient(circle at 10% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 30% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 50% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 70% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px),
+    radial-gradient(circle at 90% 0, transparent 18px, #12123a 18px, #12123a 20px, transparent 20px);
+}
+
+/* stage frame */
+.stage-frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #0a0a1a;
+  overflow: hidden;
+  border-left: 6px solid #1a1a4e;
+  border-right: 6px solid #1a1a4e;
+  border-bottom: 6px solid #1a1a4e;
+  border-radius: 0 0 8px 8px;
+  box-shadow:
+    0 20px 60px -10px rgba(0,0,0,0.4),
+    inset 0 0 60px rgba(0,0,0,0.5);
+}
+
+/* spotlight glow */
+.stage-frame::before {
+  content: '';
+  position: absolute;
+  top: -30px; left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(255,240,200,0.15) 0%, transparent 70%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* the photo */
+.stage-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.stage-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.stage-photo .stage-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 50px 28px 22px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  z-index: 3;
+}
+
+/* — curtains — */
+.curtain-left,
+.curtain-right {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 52%;
+  z-index: 3;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.curtain-left { left: 0; transform: translateX(0); }
+.curtain-right { right: 0; transform: translateX(0); }
+
+/* curtain fabric */
+.curtain-left .curtain-fabric,
+.curtain-right .curtain-fabric {
+  width: 100%; height: 100%;
+  position: relative;
+}
+
+.curtain-left .curtain-fabric {
+  background: linear-gradient(90deg,
+    #1a1a4e 0%, #1e1e5a 15%, #161648 25%,
+    #1a1a4e 35%, #1e1e5a 50%, #161648 60%,
+    #1a1a4e 70%, #1e1e5a 85%, #161648 100%
+  );
+}
+.curtain-right .curtain-fabric {
+  background: linear-gradient(270deg,
+    #1a1a4e 0%, #1e1e5a 15%, #161648 25%,
+    #1a1a4e 35%, #1e1e5a 50%, #161648 60%,
+    #1a1a4e 70%, #1e1e5a 85%, #161648 100%
+  );
+}
+
+/* curtain fold shadows */
+.curtain-left .curtain-fabric::after,
+.curtain-right .curtain-fabric::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg,
+    transparent 0px, transparent 20px,
+    rgba(0,0,0,0.12) 20px, rgba(0,0,0,0.12) 22px,
+    transparent 22px, transparent 40px
+  );
+}
+
+/* open state */
+.stage-frame.open .curtain-left { transform: translateX(-100%); }
+.stage-frame.open .curtain-right { transform: translateX(100%); }
+
+/* — controls — */
+.stage-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.stage-btn {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--ink);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.stage-btn:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.stage-counter {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 60px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+/* — responsive — */
+@media (max-width: 860px) {
+  .stage-wrap { margin: 30px 16px 0; }
+}
+/* ═══════════ end theater stage ═══════════ */
+</style>
 </head>
 <body data-page="portfolio">
 
@@ -14,13 +203,13 @@
 <section class="hero hero-sm" id="top">
   <div class="hero-slide active" style="background-image:url('images/site/slider1.jpg')"></div>
   <div class="hero-content">
-    <div class="eyebrow">Residential</div>
-    <h1>High Rise Apartments</h1>
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="portfolio.html">Portfolio</a> / <span>Apartments</span></div>
+    <div class="eyebrow"><span class="sketch-highlight">Residential</span></div>
+    <h1><span class="sketch-highlight">High Rise Apartments</span></h1>
+    <div class="breadcrumb"><span class="sketch-highlight" style="padding:4px 15px;"><a href="index.html" style="color:inherit;">Home</a> / <a href="portfolio.html" style="color:inherit;">Portfolio</a> / <span>Apartments</span></span></div>
   </div>
 </section>
 
-<section>
+<section class="apt-showcase">
   <div class="container">
     <div class="cat-pills reveal">
       <a href="apartments.html" class="active">Apartments</a>
@@ -28,86 +217,31 @@
       <a href="interior.html">Interior</a>
       <a href="residential.html">Residences</a>
       <a href="others.html">Others</a>
-      <a href="portfolio-details.html">More Categories</a>
     </div>
     <div class="section-title reveal">
       <div class="eyebrow">Portfolio</div>
       <h2>High Rise Apartments</h2>
       <p>Strong, safety-first structures built with the best materials and delivered on schedule.</p>
     </div>
-    <div class="portfolio-grid reveal">
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap1.jpg" alt="Apartments 1" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 1</h4></div></div>
+  </div>
+
+  <div class="stage-wrap reveal">
+    <div class="stage-valance">
+      <div class="stage-valance-drape"></div>
+    </div>
+    <div class="stage-frame" id="stageFrame">
+      <div class="stage-photo" id="stagePhoto">
+        <img src="images/portfolio/ap1.jpg" alt="Apartments 1" id="stageImg">
+        <div class="stage-label" id="stageLabel">Apartments 1</div>
       </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap2.jpg" alt="Apartments 2" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 2</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap3.jpg" alt="Apartments 3" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 3</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap4.jpg" alt="Apartments 4" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 4</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap5.jpeg" alt="Apartments 5" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 5</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap6.jpeg" alt="Apartments 6" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 6</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap7.jpeg" alt="Apartments 7" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 7</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap8.jpeg" alt="Apartments 8" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 8</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap9.jpeg" alt="Apartments 9" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 9</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap10.jpeg" alt="Apartments 10" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 10</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap11.jpeg" alt="Apartments 11" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 11</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap12.jpeg" alt="Apartments 12" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 12</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap13.jpeg" alt="Apartments 13" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 13</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap14.jpg" alt="Apartments 14" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 14</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap15.jpg" alt="Apartments 15" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 15</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap16.jpg" alt="Apartments 16" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 16</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap17.jpg" alt="Apartments 17" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 17</h4></div></div>
-      </div>
-      <div class="portfolio-item">
-        <img src="images/portfolio/ap18.jpg" alt="Apartments 18" loading="lazy">
-        <div class="overlay"><div><span>Residential</span><h4>Apartments 18</h4></div></div>
-      </div>
+      <div class="curtain-left"><div class="curtain-fabric"></div></div>
+      <div class="curtain-right"><div class="curtain-fabric"></div></div>
+    </div>
+
+    <div class="stage-controls">
+      <button class="stage-btn" id="stagePrev">&#10094;</button>
+      <span class="stage-counter" id="stageCounter">1 / 18</span>
+      <button class="stage-btn" id="stageNext">&#10095;</button>
     </div>
   </div>
 </section>
@@ -122,5 +256,72 @@
 
 <footer id="site-footer" data-include="footer.html"></footer>
 <script src="js/main.js?v=31"></script>
+<script>
+(function(){
+  const images = [
+    ['images/portfolio/ap1.jpg','Apartments 1'],
+    ['images/portfolio/ap2.jpg','Apartments 2'],
+    ['images/portfolio/ap3.jpg','Apartments 3'],
+    ['images/portfolio/ap4.jpg','Apartments 4'],
+    ['images/portfolio/ap5.jpeg','Apartments 5'],
+    ['images/portfolio/ap6.jpeg','Apartments 6'],
+    ['images/portfolio/ap7.jpeg','Apartments 7'],
+    ['images/portfolio/ap8.jpeg','Apartments 8'],
+    ['images/portfolio/ap9.jpeg','Apartments 9'],
+    ['images/portfolio/ap10.jpeg','Apartments 10'],
+    ['images/portfolio/ap11.jpeg','Apartments 11'],
+    ['images/portfolio/ap12.jpeg','Apartments 12'],
+    ['images/portfolio/ap13.jpeg','Apartments 13'],
+    ['images/portfolio/ap14.jpg','Apartments 14'],
+    ['images/portfolio/ap15.jpg','Apartments 15'],
+    ['images/portfolio/ap16.jpg','Apartments 16'],
+    ['images/portfolio/ap17.jpg','Apartments 17'],
+    ['images/portfolio/ap18.jpg','Apartments 18'],
+  ];
+
+  const frame = document.getElementById('stageFrame');
+  const img = document.getElementById('stageImg');
+  const label = document.getElementById('stageLabel');
+  const counter = document.getElementById('stageCounter');
+  const total = images.length;
+  let current = 0;
+  let animating = false;
+
+  // open curtain on first load
+  setTimeout(() => frame.classList.add('open'), 400);
+
+  function goTo(idx){
+    if(animating) return;
+    animating = true;
+
+    // 1. Close curtains
+    frame.classList.remove('open');
+
+    // 2. After curtains close, swap image
+    setTimeout(() => {
+      current = ((idx % total) + total) % total;
+      img.src = images[current][0];
+      img.alt = images[current][1];
+      label.textContent = images[current][1];
+      counter.textContent = (current + 1) + ' / ' + total;
+
+      // 3. Open curtains to reveal
+      setTimeout(() => {
+        frame.classList.add('open');
+        setTimeout(() => { animating = false; }, 1200);
+      }, 300);
+    }, 1200);
+  }
+
+  document.getElementById('stagePrev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('stageNext').addEventListener('click', () => goTo(current + 1));
+
+  // auto-advance
+  let auto = setInterval(() => goTo(current + 1), 3000);
+  const wrap = document.querySelector('.stage-wrap');
+  wrap.addEventListener('mouseenter', () => clearInterval(auto));
+  wrap.addEventListener('mouseleave', () => { auto = setInterval(() => goTo(current + 1), 3000); });
+})();
+</script>
 </body>
 </html>
