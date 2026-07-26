@@ -239,7 +239,7 @@ $partners = $stmt_partners->fetchAll();
 
     <div class="gallery-showcase reveal">
       <div class="featured-section">
-        <img id="featured-img" src="images/team/12.jpg" alt="Team at work" loading="lazy" class="featured-image">
+        <img id="featured-img" src="images/team/12.jpg" alt="Team at work" class="featured-image">
         <div class="featured-caption">
           <img src="images/team/profile.jpg" alt="Profile" class="caption-avatar">
           <div class="caption-text">
@@ -301,6 +301,7 @@ $partners = $stmt_partners->fetchAll();
   object-fit: cover;
   display: block;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  transition: opacity 0.3s ease;
 }
 
 .featured-caption {
@@ -345,7 +346,6 @@ $partners = $stmt_partners->fetchAll();
   overflow-y: hidden;
   scroll-behavior: smooth;
   padding: 4px 0;
-  width: 150px;
   flex-shrink: 0;
   scrollbar-width: none;
   flex-wrap: nowrap;
@@ -385,13 +385,13 @@ $partners = $stmt_partners->fetchAll();
     grid-template-columns: 1fr;
     gap: 40px;
   }
-}
 
-@media (max-width: 768px) {
   .featured-image {
     height: 350px;
   }
+}
 
+@media (max-width: 768px) {
   .gallery-thumbnails {
     flex-wrap: nowrap;
   }
@@ -405,7 +405,7 @@ $partners = $stmt_partners->fetchAll();
 </style>
 
 <script>
-var carouselIndex = 0;
+var carouselIndex = 1;
 var autoCarouselInterval;
 
 function autoCarousel() {
@@ -414,7 +414,15 @@ function autoCarousel() {
 
   var nextThumb = thumbs[carouselIndex % thumbs.length];
   var src = nextThumb.getAttribute('data-src');
-  document.getElementById('featured-img').src = src;
+
+  // Fade out, change src, fade in
+  var featuredImg = document.getElementById('featured-img');
+  featuredImg.style.opacity = '0';
+  setTimeout(function() {
+    featuredImg.src = src;
+    featuredImg.alt = 'Team member ' + (carouselIndex % thumbs.length);
+    featuredImg.style.opacity = '1';
+  }, 150);
 
   // Update opacity states for visual feedback
   document.querySelectorAll('.thumb-item').forEach(t => t.style.opacity = '0.3');
@@ -434,16 +442,34 @@ document.addEventListener('DOMContentLoaded', function() {
   // Start auto carousel every 4 seconds
   autoCarouselInterval = setInterval(autoCarousel, 4000);
 
-  // Pause on hover over featured image
-  var featuredImg = document.querySelector('.featured-image');
-  if(featuredImg) {
-    featuredImg.addEventListener('mouseenter', function() {
+  // Pause on hover over entire featured section
+  var featuredSection = document.querySelector('.featured-section');
+  if(featuredSection) {
+    featuredSection.addEventListener('mouseenter', function() {
       clearInterval(autoCarouselInterval);
     });
 
-    featuredImg.addEventListener('mouseleave', function() {
+    featuredSection.addEventListener('mouseleave', function() {
+      clearInterval(autoCarouselInterval);
       autoCarouselInterval = setInterval(autoCarousel, 4000);
     });
+  }
+
+  // Keyboard & reduced-motion accessibility
+  var featuredImg = document.getElementById('featured-img');
+  if(featuredImg) {
+    featuredImg.setAttribute('tabindex', '0');
+    featuredImg.addEventListener('focus', function() {
+      clearInterval(autoCarouselInterval);
+    });
+    featuredImg.addEventListener('blur', function() {
+      autoCarouselInterval = setInterval(autoCarousel, 4000);
+    });
+  }
+
+  // Respect prefers-reduced-motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    clearInterval(autoCarouselInterval);
   }
 });
 </script>
