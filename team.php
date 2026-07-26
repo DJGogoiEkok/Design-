@@ -281,82 +281,126 @@ $partners = $stmt_partners->fetchAll();
 
 <style>
 .gallery-section { padding: 80px 0; background: #f9f9f9; }
+
 .gallery-showcase {
-  display: grid; grid-template-columns: 400px 1fr; gap: 50px; align-items: flex-start;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 50px;
+  align-items: flex-start;
 }
 
 .featured-section {
-  display: flex; flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
-.featured-image {
-  width: 100%; border-radius: 32px 32px 0 0;
-  height: 450px; object-fit: cover; display: block;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-.featured-caption {
-  background: #fff; border-radius: 0 0 32px 32px;
-  padding: 20px; display: flex; gap: 14px; align-items: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-.caption-avatar {
-  width: 48px; height: 48px; border-radius: 50%;
-  object-fit: cover; border: 2px solid #f0f0f0;
-}
-.caption-text { flex: 1; }
-.caption-text h4 { margin: 0; font-size: 1rem; font-weight: 700; }
-.caption-text p { margin: 2px 0 0; font-size: 0.85rem; color: #666; }
 
-.carousel-container {
-  display: flex; gap: 12px; align-items: center;
+.featured-image {
+  width: 100%;
+  border-radius: 32px 32px 0 0;
+  height: 450px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
-.carousel-btn {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: #fff; border: 2px solid #ddd;
-  font-size: 24px; cursor: pointer; transition: all 0.3s ease;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; color: #333;
+
+.featured-caption {
+  background: #fff;
+  border-radius: 0 0 32px 32px;
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
-.carousel-btn:hover {
-  background: #f0f0f0; border-color: #999; transform: scale(1.05);
+
+.caption-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f0f0f0;
 }
-.carousel-btn:active { transform: scale(0.95); }
+
+.caption-text {
+  flex: 1;
+}
+
+.caption-text h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.caption-text p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
 
 .gallery-thumbnails {
-  display: flex; gap: 12px; align-items: flex-start;
-  overflow-x: auto; overflow-y: hidden;
-  scroll-behavior: smooth; padding: 4px 0;
-  width: 150px; flex-shrink: 0;
-  scrollbar-width: none; flex-wrap: nowrap;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding: 4px 0;
+  width: 150px;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
 }
-.gallery-thumbnails::-webkit-scrollbar { display: none; }
+
+.gallery-thumbnails::-webkit-scrollbar {
+  display: none;
+}
 
 .thumb-item {
-  position: relative; min-width: 60px; width: 60px; height: 520px;
-  border-radius: 32px; overflow: hidden;
-  cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  min-width: 60px;
+  width: 60px;
+  height: 520px;
+  border-radius: 32px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-  flex-shrink: 0; flex-grow: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
-.thumb-item:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(0,0,0,0.18); }
+
+.thumb-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+}
+
 .thumb-item img {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.thumb-indicator {
-  position: absolute; bottom: 8px; left: 50%;
-  transform: translateX(-50%); width: 24px; height: 24px;
-  border-radius: 50%; border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 @media (max-width: 1024px) {
-  .gallery-showcase { grid-template-columns: 1fr; gap: 40px; }
-  .gallery-thumbnails { justify-content: flex-start; }
+  .gallery-showcase {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
 
 @media (max-width: 768px) {
-  .featured-image { height: 350px; }
-  .gallery-thumbnails { flex-wrap: nowrap; }
-  .thumb-item { width: 50px; height: 405px; min-width: 50px; }
+  .featured-image {
+    height: 350px;
+  }
+
+  .gallery-thumbnails {
+    flex-wrap: nowrap;
+  }
+
+  .thumb-item {
+    width: 50px;
+    height: 405px;
+    min-width: 50px;
+  }
 }
 </style>
 
