@@ -247,6 +247,15 @@ $partners = $stmt_partners->fetchAll();
             <p>Behind the scenes moments</p>
           </div>
         </div>
+        <button id="carousel-pause-btn" class="carousel-pause-btn" aria-label="Pause gallery auto-play" title="Pause/Resume">
+          <svg class="pause-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="4" width="3" height="16" fill="currentColor"/>
+            <rect x="15" y="4" width="3" height="16" fill="currentColor"/>
+          </svg>
+          <svg class="play-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+          </svg>
+        </button>
       </div>
 
       <div class="gallery-thumbnails" id="thumbnailsCarousel">
@@ -290,6 +299,7 @@ $partners = $stmt_partners->fetchAll();
 }
 
 .featured-section {
+  position: relative;
   display: flex;
   flex-direction: column;
 }
@@ -302,6 +312,11 @@ $partners = $stmt_partners->fetchAll();
   display: block;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15);
   transition: opacity 0.3s ease;
+}
+
+#featured-img:focus-visible {
+  outline: 2px solid #333;
+  outline-offset: 2px;
 }
 
 .featured-caption {
@@ -338,6 +353,51 @@ $partners = $stmt_partners->fetchAll();
   color: #666;
 }
 
+.carousel-pause-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s, border-color 0.2s;
+  z-index: 10;
+}
+
+.carousel-pause-btn:hover {
+  background: #fff;
+  border-color: #999;
+}
+
+.carousel-pause-btn svg {
+  width: 20px;
+  height: 20px;
+  color: #333;
+}
+
+.carousel-pause-btn.playing .play-icon {
+  display: none;
+}
+
+.carousel-pause-btn.playing .pause-icon {
+  display: block;
+}
+
+.carousel-pause-btn.paused .play-icon {
+  display: block;
+}
+
+.carousel-pause-btn.paused .pause-icon {
+  display: none;
+}
+
 .gallery-thumbnails {
   display: flex;
   gap: 12px;
@@ -362,8 +422,8 @@ $partners = $stmt_partners->fetchAll();
   height: 520px;
   border-radius: 32px;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   box-shadow: 0 12px 40px rgba(0,0,0,0.12);
   flex-shrink: 0;
   flex-grow: 0;
@@ -393,13 +453,39 @@ $partners = $stmt_partners->fetchAll();
 
 @media (max-width: 768px) {
   .gallery-thumbnails {
-    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: auto;
+    height: auto;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .gallery-thumbnails::-webkit-scrollbar-thumb:hover {
+    background: #999;
   }
 
   .thumb-item {
-    width: 50px;
-    height: 405px;
-    min-width: 50px;
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    min-width: 100%;
   }
 }
 </style>
@@ -407,6 +493,9 @@ $partners = $stmt_partners->fetchAll();
 <script>
 var carouselIndex = 1;
 var autoCarouselInterval;
+var isPausedByUser = false;
+var isHovered = false;
+var isFocused = false;
 
 function autoCarousel() {
   var thumbs = document.querySelectorAll('.thumb-item');
@@ -420,7 +509,7 @@ function autoCarousel() {
   featuredImg.style.opacity = '0';
   setTimeout(function() {
     featuredImg.src = src;
-    featuredImg.alt = 'Team member ' + (carouselIndex % thumbs.length);
+    // Alt text stays constant (initialized in HTML)
     featuredImg.style.opacity = '1';
   }, 150);
 
@@ -429,6 +518,23 @@ function autoCarousel() {
   nextThumb.style.opacity = '1';
 
   carouselIndex++;
+}
+
+function updatePauseState() {
+  if (isHovered || isFocused || isPausedByUser) {
+    clearInterval(autoCarouselInterval);
+  } else if (!reduceMotion) {
+    startCarousel();
+  }
+}
+
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function startCarousel() {
+  clearInterval(autoCarouselInterval);
+  if (!reduceMotion && !isPausedByUser) {
+    autoCarouselInterval = setInterval(autoCarousel, 4000);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -440,36 +546,53 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.thumb-item:not(:first-child)').forEach(t => t.style.opacity = '0.3');
 
   // Start auto carousel every 4 seconds
-  autoCarouselInterval = setInterval(autoCarousel, 4000);
+  startCarousel();
 
-  // Pause on hover over entire featured section
+  // Pause/play button control
+  var pauseBtn = document.getElementById('carousel-pause-btn');
+  if(pauseBtn) {
+    pauseBtn.addEventListener('click', function() {
+      isPausedByUser = !isPausedByUser;
+      if (isPausedByUser) {
+        clearInterval(autoCarouselInterval);
+        pauseBtn.classList.add('paused');
+        pauseBtn.classList.remove('playing');
+      } else {
+        startCarousel();
+        pauseBtn.classList.add('playing');
+        pauseBtn.classList.remove('paused');
+      }
+    });
+    // Initialize button state
+    pauseBtn.classList.add('playing');
+  }
+
+  // Hover listeners with coordinated pause state
   var featuredSection = document.querySelector('.featured-section');
   if(featuredSection) {
     featuredSection.addEventListener('mouseenter', function() {
-      clearInterval(autoCarouselInterval);
+      isHovered = true;
+      updatePauseState();
     });
 
     featuredSection.addEventListener('mouseleave', function() {
-      clearInterval(autoCarouselInterval);
-      autoCarouselInterval = setInterval(autoCarousel, 4000);
+      isHovered = false;
+      updatePauseState();
     });
   }
 
-  // Keyboard & reduced-motion accessibility
+  // Focus listeners with coordinated pause state
   var featuredImg = document.getElementById('featured-img');
   if(featuredImg) {
     featuredImg.setAttribute('tabindex', '0');
     featuredImg.addEventListener('focus', function() {
-      clearInterval(autoCarouselInterval);
+      isFocused = true;
+      updatePauseState();
     });
     featuredImg.addEventListener('blur', function() {
-      autoCarouselInterval = setInterval(autoCarousel, 4000);
+      isFocused = false;
+      updatePauseState();
     });
-  }
-
-  // Respect prefers-reduced-motion
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    clearInterval(autoCarouselInterval);
   }
 });
 </script>
