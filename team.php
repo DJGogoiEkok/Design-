@@ -252,7 +252,7 @@ $partners = $stmt_partners->fetchAll();
             <rect x="6" y="4" width="3" height="16" fill="currentColor"/>
             <rect x="15" y="4" width="3" height="16" fill="currentColor"/>
           </svg>
-          <svg class="play-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+          <svg class="play-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <polygon points="5,3 19,12 5,21" fill="currentColor"/>
           </svg>
         </button>
@@ -553,12 +553,13 @@ document.addEventListener('DOMContentLoaded', function() {
   if(pauseBtn) {
     pauseBtn.addEventListener('click', function() {
       isPausedByUser = !isPausedByUser;
+      updatePauseState();
+
+      // Update button appearance
       if (isPausedByUser) {
-        clearInterval(autoCarouselInterval);
         pauseBtn.classList.add('paused');
         pauseBtn.classList.remove('playing');
       } else {
-        startCarousel();
         pauseBtn.classList.add('playing');
         pauseBtn.classList.remove('paused');
       }
