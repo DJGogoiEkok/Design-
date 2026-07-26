@@ -408,62 +408,43 @@ $partners = $stmt_partners->fetchAll();
 var carouselIndex = 0;
 var autoCarouselInterval;
 
-function changeFeatured(el) {
-  var src = el.getAttribute('data-src');
-  document.getElementById('featured-img').src = src;
-  document.querySelectorAll('.thumb-item').forEach(t => t.style.opacity = '0.3');
-  el.style.opacity = '1';
-
-  // Scroll carousel to position active thumbnail on the right (aligned with featured image)
-  var carousel = document.getElementById('thumbnailsCarousel');
-  var thumbWidth = 60 + 12; // thumbnail width + gap
-  var carouselWidth = carousel.offsetWidth;
-  var thumbIndex = Array.from(document.querySelectorAll('.thumb-item')).indexOf(el);
-
-  // Position active thumbnail at the right edge of carousel
-  var scrollPosition = (thumbIndex + 1) * thumbWidth - carouselWidth + 60;
-  carousel.scrollTo({
-    left: Math.max(0, scrollPosition),
-    behavior: 'smooth'
-  });
-}
-
-function scrollThumbnails(direction) {
-  var carousel = document.getElementById('thumbnailsCarousel');
-  var scrollAmount = 100;
-  carousel.scrollBy({
-    left: direction * scrollAmount,
-    behavior: 'smooth'
-  });
-}
-
 function autoCarousel() {
   var thumbs = document.querySelectorAll('.thumb-item');
   if(thumbs.length === 0) return;
 
   var nextThumb = thumbs[carouselIndex % thumbs.length];
-  changeFeatured(nextThumb);
+  var src = nextThumb.getAttribute('data-src');
+  document.getElementById('featured-img').src = src;
+
+  // Update opacity states for visual feedback
+  document.querySelectorAll('.thumb-item').forEach(t => t.style.opacity = '0.3');
+  nextThumb.style.opacity = '1';
+
   carouselIndex++;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  var first = document.querySelector('.thumb-item');
-  if(first) {
-    first.style.opacity = '1';
-    document.querySelectorAll('.thumb-item:not(:first-child)').forEach(t => t.style.opacity = '0.5');
-  }
+  var thumbs = document.querySelectorAll('.thumb-item');
+  if(thumbs.length === 0) return;
+
+  // Set first thumbnail as initially active
+  thumbs[0].style.opacity = '1';
+  document.querySelectorAll('.thumb-item:not(:first-child)').forEach(t => t.style.opacity = '0.3');
 
   // Start auto carousel every 4 seconds
   autoCarouselInterval = setInterval(autoCarousel, 4000);
 
-  // Pause on hover
-  var carousel = document.getElementById('thumbnailsCarousel');
-  carousel.addEventListener('mouseenter', function() {
-    clearInterval(autoCarouselInterval);
-  });
-  carousel.addEventListener('mouseleave', function() {
-    autoCarouselInterval = setInterval(autoCarousel, 4000);
-  });
+  // Pause on hover over featured image
+  var featuredImg = document.querySelector('.featured-image');
+  if(featuredImg) {
+    featuredImg.addEventListener('mouseenter', function() {
+      clearInterval(autoCarouselInterval);
+    });
+
+    featuredImg.addEventListener('mouseleave', function() {
+      autoCarouselInterval = setInterval(autoCarousel, 4000);
+    });
+  }
 });
 </script>
 
