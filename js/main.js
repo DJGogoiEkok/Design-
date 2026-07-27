@@ -668,6 +668,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (splash) {
     if (window.skipSplashScreen) {
       splash.remove();
+      document.body.classList.remove('splash-active');
       return;
     }
     document.body.classList.add('splash-active');

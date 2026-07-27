@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir($upload_dir, 0755, true);
             }
             
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'mp4', 'webm'];
+            $file_ext = strtolower(pathinfo($_FILES['hero_image']['name'], PATHINFO_EXTENSION));
+            if (!in_array($file_ext, $allowed_extensions)) {
+                die('Invalid file type');
+            }
             $file_name = time() . '_' . basename($_FILES['hero_image']['name']);
             $target_file = $upload_dir . $file_name;
             

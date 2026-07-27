@@ -2298,6 +2298,9 @@ a.tile:hover .tile-arrow { opacity: 1; transform: translate(0, 0); }
   height: 70vh;
   overflow-y: hidden;
 }
+.portfolio-text-side::-webkit-scrollbar {
+  display: none;
+}
 
 
 .text-item {
