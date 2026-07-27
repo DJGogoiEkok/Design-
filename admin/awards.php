@@ -17,6 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            if (!in_array($file_ext, $allowed_extensions)) {
+                die('Invalid file type');
+            }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
@@ -41,6 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $upload_dir = '../images/site/awards_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
+            }
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            if (!in_array($file_ext, $allowed_extensions)) {
+                die('Invalid file type');
             }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
