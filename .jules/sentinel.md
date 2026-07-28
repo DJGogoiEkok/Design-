@@ -1,0 +1,4 @@
+## 2026-07-27 - [Exposed SQLite DB & Unrestricted Uploads]
+**Vulnerability:** The SQLite database `design_plus.sqlite` was publicly accessible in the root directory. Additionally, admin panel file uploads (e.g. `awards.php`, `hero.php`) allowed uploading arbitrary file extensions, leading to potential RCE. Finally, several utility scripts (`update_*.php`) lacked authentication checks.
+**Learning:** Legacy PHP apps often use SQLite databases that default to root and forget to restrict uploads by file type.
+**Prevention:** Always rename `.sqlite` to a hidden `.sqlite` file, configure an `.htaccess` to block access to DB files, and enforce strict file extension allowlists (checking `$_FILES['name']` via `pathinfo` and ensuring it's not empty) before moving uploaded files. Also, always ensure utility scripts invoke `session_start()` and check for auth.

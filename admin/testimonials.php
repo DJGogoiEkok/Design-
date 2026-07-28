@@ -17,9 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $upload_dir = '../images/site/testimonials_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
+            }            $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
+
+            // Security: validate image extension
+            if (!empty($_FILES['image']['name'])) {
+                $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                $file_ext = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                if (!in_array($file_ext, $allowed_exts)) {
+                    die('Invalid file type');
+                }
+            }
+
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_path = 'images/site/testimonials_uploads/' . $file_name;
             }
@@ -44,9 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $upload_dir = '../images/site/testimonials_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
+            }            $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
+
+            // Security: validate image extension
+            if (!empty($_FILES['image']['name'])) {
+                $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                $file_ext = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+                if (!in_array($file_ext, $allowed_exts)) {
+                    die('Invalid file type');
+                }
+            }
+
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_path = 'images/site/testimonials_uploads/' . $file_name;
                 $image_query_part = ", image_path = ?";
