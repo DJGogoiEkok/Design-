@@ -20,8 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $file_name = time() . '_' . basename($_FILES['hero_image']['name']);
             $target_file = $upload_dir . $file_name;
+            $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'ogg'];
             
-            if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
+            if (in_array($ext, $allowed) && move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
                 $image_path = 'images/site/hero_uploads/' . $file_name;
                 $stmt = $db->prepare("INSERT INTO hero_images (image_path, order_index) VALUES (?, ?)");
                 $stmt->execute([$image_path, $order_index]);
