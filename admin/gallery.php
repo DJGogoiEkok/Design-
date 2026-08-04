@@ -12,6 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category = $_POST['category'] ?? 'projects';
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowed_exts = ["jpg", "jpeg", "png", "gif", "webp"];
+            $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowed_exts)) {
+                die("Invalid file type.");
+            }
+
             $upload_dir = '../images/site/gallery_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
@@ -37,6 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [$title, $category];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowed_exts = ["jpg", "jpeg", "png", "gif", "webp"];
+            $ext = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowed_exts)) {
+                die("Invalid file type.");
+            }
+
             $upload_dir = '../images/site/gallery_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
