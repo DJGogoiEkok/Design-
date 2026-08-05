@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category = $_POST['category'] ?? 'projects';
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) { die('Security Exception: Invalid file extension'); }
             $upload_dir = '../images/site/gallery_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
@@ -37,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [$title, $category];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) { die('Security Exception: Invalid file extension'); }
             $upload_dir = '../images/site/gallery_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
