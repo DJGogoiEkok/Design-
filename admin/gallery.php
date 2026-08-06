@@ -18,10 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
-                $stmt->execute([$title, $image_path, $category]);
+
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            if (in_array($ext, $allowed_exts)) {
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
+                    $stmt->execute([$title, $image_path, $category]);
+                }
             }
         }
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete') {
@@ -43,10 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $image_query_part = ", image_path = ?";
-                $params[] = $image_path;
+
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            if (in_array($ext, $allowed_exts)) {
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $image_query_part = ", image_path = ?";
+                    $params[] = $image_path;
+                }
             }
         }
         
