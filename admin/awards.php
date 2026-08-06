@@ -19,8 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/awards_uploads/' . $file_name;
+
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            if (in_array($ext, $allowed_exts)) {
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/awards_uploads/' . $file_name;
+                }
             }
         }
         $stmt = $db->prepare("INSERT INTO awards (title, description, image_path) VALUES (?, ?, ?)");
@@ -44,10 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $file_name = time() . '_' . basename($_FILES['image']['name']);
             $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/awards_uploads/' . $file_name;
-                $image_query_part = ", image_path = ?";
-                $params[] = $image_path;
+
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            if (in_array($ext, $allowed_exts)) {
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/awards_uploads/' . $file_name;
+                    $image_query_part = ", image_path = ?";
+                    $params[] = $image_path;
+                }
             }
         }
         
