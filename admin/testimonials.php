@@ -14,14 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $image_path = '';
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = '../images/site/testimonials_uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/testimonials_uploads/' . $file_name;
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+            if (in_array($file_ext, $allowed_extensions)) {
+                $upload_dir = '../images/site/testimonials_uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                $file_name = time() . '_' . basename($_FILES['image']['name']);
+                $target_file = $upload_dir . $file_name;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/testimonials_uploads/' . $file_name;
+                }
+            } else {
+                error_log("Security warning: Invalid file extension attempted in testimonials upload: " . $file_ext);
             }
         }
         
@@ -41,16 +48,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [$author_name, $quote];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = '../images/site/testimonials_uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/testimonials_uploads/' . $file_name;
-                $image_query_part = ", image_path = ?";
-                $params[] = $image_path;
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+            if (in_array($file_ext, $allowed_extensions)) {
+                $upload_dir = '../images/site/testimonials_uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                $file_name = time() . '_' . basename($_FILES['image']['name']);
+                $target_file = $upload_dir . $file_name;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/testimonials_uploads/' . $file_name;
+                    $image_query_part = ", image_path = ?";
+                    $params[] = $image_path;
+                }
+            } else {
+                error_log("Security warning: Invalid file extension attempted in testimonials upload: " . $file_ext);
             }
         }
         
