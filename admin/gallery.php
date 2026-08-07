@@ -12,16 +12,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $category = $_POST['category'] ?? 'projects';
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = '../images/site/gallery_uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
-                $stmt->execute([$title, $image_path, $category]);
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+            if (in_array($file_ext, $allowed_extensions)) {
+                $upload_dir = '../images/site/gallery_uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                $file_name = time() . '_' . basename($_FILES['image']['name']);
+                $target_file = $upload_dir . $file_name;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
+                    $stmt->execute([$title, $image_path, $category]);
+                }
+            } else {
+                error_log("Security warning: Invalid file extension attempted in gallery upload: " . $file_ext);
             }
         }
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete') {
@@ -37,16 +44,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [$title, $category];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = '../images/site/gallery_uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $image_query_part = ", image_path = ?";
-                $params[] = $image_path;
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $file_ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+
+            if (in_array($file_ext, $allowed_extensions)) {
+                $upload_dir = '../images/site/gallery_uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                $file_name = time() . '_' . basename($_FILES['image']['name']);
+                $target_file = $upload_dir . $file_name;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $image_query_part = ", image_path = ?";
+                    $params[] = $image_path;
+                }
+            } else {
+                error_log("Security warning: Invalid file extension attempted in gallery upload: " . $file_ext);
             }
         }
         

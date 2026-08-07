@@ -13,18 +13,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Handle file upload
         if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = '../images/site/hero_uploads/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'ogg'];
+            $file_ext = strtolower(pathinfo($_FILES['hero_image']['name'], PATHINFO_EXTENSION));
             
-            $file_name = time() . '_' . basename($_FILES['hero_image']['name']);
-            $target_file = $upload_dir . $file_name;
-            
-            if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/hero_uploads/' . $file_name;
-                $stmt = $db->prepare("INSERT INTO hero_images (image_path, order_index) VALUES (?, ?)");
-                $stmt->execute([$image_path, $order_index]);
+            if (in_array($file_ext, $allowed_extensions)) {
+                $upload_dir = '../images/site/hero_uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+
+                $file_name = time() . '_' . basename($_FILES['hero_image']['name']);
+                $target_file = $upload_dir . $file_name;
+
+                if (move_uploaded_file($_FILES['hero_image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/hero_uploads/' . $file_name;
+                    $stmt = $db->prepare("INSERT INTO hero_images (image_path, order_index) VALUES (?, ?)");
+                    $stmt->execute([$image_path, $order_index]);
+                }
+            } else {
+                // Log or handle invalid file type securely
+                error_log("Security warning: Invalid file extension attempted in hero upload: " . $file_ext);
             }
         }
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete') {

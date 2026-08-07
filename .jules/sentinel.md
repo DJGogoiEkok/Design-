@@ -1,0 +1,4 @@
+## 2024-05-14 - [Unrestricted File Upload Leading to RCE]
+**Vulnerability:** Found multiple file upload endpoints in the admin panel (`admin/hero.php`, `admin/awards.php`, `admin/gallery.php`, `admin/team.php`, `admin/testimonials.php`) that directly accepted user-provided files without server-side validation of file extensions.
+**Learning:** Depending solely on client-side constraints (like HTML `accept` attributes) or ignoring file type checks entirely allows attackers to upload executable scripts (e.g., `.php` files). If the upload directory is accessible, they can execute these scripts and gain Remote Code Execution (RCE).
+**Prevention:** Always implement strict server-side file extension whitelists (e.g., `['jpg', 'png']`) and validate the extension of every uploaded file using tools like `pathinfo()` before calling `move_uploaded_file()`. Also, store uploads outside the web root or disable execution in upload directories if possible.
