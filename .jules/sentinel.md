@@ -1,0 +1,4 @@
+## 2026-08-09 - [CRITICAL] Fix Unrestricted File Upload in Admin Panel
+**Vulnerability:** Unrestricted File Upload vulnerability in admin upload scripts (`hero.php`, `team.php`, `gallery.php`, `awards.php`, `testimonials.php`). The code did not perform server-side file extension validation when processing file uploads, instead relying on `move_uploaded_file` and basic checks.
+**Learning:** File uploads represent a severe risk point. A lack of server-side extension validation allows malicious actors to upload executable code (e.g., a PHP web shell) and compromise the entire application.
+**Prevention:** Always implement strict server-side file extension validation using an explicit whitelist (e.g., checking `$ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));` against an array of allowed extensions). Never rely solely on client-side validation or basic MIME checks.
