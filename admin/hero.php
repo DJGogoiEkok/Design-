@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Handle file upload
         if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] === UPLOAD_ERR_OK) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'webm', 'ogg'];
+            if (!in_array(strtolower(pathinfo($_FILES['hero_image']['name'], PATHINFO_EXTENSION)), $allowed)) { die('Invalid file type'); }
             $upload_dir = '../images/site/hero_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);

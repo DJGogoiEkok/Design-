@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $image_path = '';
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            if (!in_array(strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION)), $allowed)) { die('Invalid file type'); }
             $upload_dir = '../images/site/awards_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
@@ -38,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params = [$title, $description];
         
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            if (!in_array(strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION)), $allowed)) { die('Invalid file type'); }
             $upload_dir = '../images/site/awards_uploads/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);

@@ -1,0 +1,4 @@
+## 2024-05-24 - Unrestricted File Upload in Admin Panel
+**Vulnerability:** The admin panel scripts handling file uploads (`admin/hero.php`, `admin/awards.php`, `admin/gallery.php`, `admin/team.php`, `admin/testimonials.php`) completely lacked server-side file extension validation. This allowed any authenticated admin to upload arbitrary files (e.g., PHP web shells), leading to Remote Code Execution (RCE).
+**Learning:** Never trust the client-side validation (like the `accept` attribute in HTML forms). Always validate the file extension and MIME type on the server-side against a strict whitelist of allowed extensions.
+**Prevention:** Implement server-side checks for `$_FILES` uploads using a whitelist array of allowed file extensions (e.g., `['jpg', 'jpeg', 'png', 'gif', 'webp']`). Validate the extension before calling `move_uploaded_file()`.
