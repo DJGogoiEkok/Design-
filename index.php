@@ -63,7 +63,7 @@
     <div class="menu-col">
       <h5>Studio</h5>
       <a href="about.html">About Us</a>
-      <a href="team.html">Our Team</a>
+      <a href="team.php">Our Team</a>
       <a href="service.html">Services</a>
       <a href="clients.html">Clients</a>
       <a href="award.html">Awards</a>

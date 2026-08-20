@@ -13,6 +13,17 @@ $team = $stmt_team->fetchAll();
 
 $stmt_partners = $db->query("SELECT * FROM team_members WHERE type = 'partner'");
 $partners = $stmt_partners->fetchAll();
+
+// Fetch gallery photos
+$stmt_gallery = $db->query("SELECT * FROM gallery_photos ORDER BY gallery_order ASC");
+$gallery_photos = $stmt_gallery->fetchAll();
+
+// Fetch gallery background image
+$stmt_bg = $db->query("SELECT background_image_path FROM gallery_settings WHERE id = 1");
+$bg_result = $stmt_bg->fetch();
+$gallery_bg_path = $bg_result['background_image_path'] ?? '';
+$gallery_bg_is_video = $gallery_bg_path && preg_match('/\.(mp4|webm|ogg)$/i', $gallery_bg_path);
+$gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,10 +47,10 @@ $partners = $stmt_partners->fetchAll();
 }
 .geo-bg svg { width: 100%; height: 100%; }
 
-.geo-bg .corner-tl { transform: translate(-80px, -80px); opacity: 0; }
-.geo-bg .corner-br { transform: translate(80px, 80px); opacity: 0; }
-.geo-bg .accent-mr { transform: translateX(60px); opacity: 0; }
-.geo-bg .accent-ml { transform: translateX(-60px); opacity: 0; }
+.geo-bg .corner-tl { transform: translate(200px, -80px); opacity: 0; }
+.geo-bg .corner-br { transform: translate(300px, 80px); opacity: 0; }
+.geo-bg .accent-mr { transform: translateX(200px); opacity: 0; }
+.geo-bg .accent-ml { transform: translateX(100px); opacity: 0; }
 .geo-bg .accent-dots { opacity: 0; }
 .geo-bg .accent-stripe { transform: scaleX(0); transform-origin: left; opacity: 0; }
 .geo-bg .accent-diamond { transform: rotate(45deg) scale(0); opacity: 0; }
@@ -124,9 +135,9 @@ $partners = $stmt_partners->fetchAll();
 <section class="hero hero-sm hero-doodle" id="top">
   <div class="hero-slide active" style="background-image:url('images/site/team-doodle-bg.png')"></div>
   <div class="hero-content">
-    <div class="eyebrow">The Design Team</div>
-    <h1>Our Team</h1>
-    <div class="breadcrumb"><a href="index.html">Home</a> / <span>Our Team</span></div>
+    <div class="eyebrow"><span class="sketch-highlight">The Design Team</span></div>
+    <h1><span class="sketch-highlight">Our Team</span></h1>
+    <div class="breadcrumb"><span class="sketch-highlight" style="padding:4px 15px;"><a href="index.php" style="color:inherit;">Home</a> / <span>Our Team</span></span></div>
   </div>
 </section>
 
@@ -197,7 +208,7 @@ $partners = $stmt_partners->fetchAll();
     </svg>
   </div>
   <div class="container">
-    <h2 class="tb-title reveal">The Design Team</h2>
+    <h2 class="tb-title reveal"><span class="sketch-highlight">The Design Team</span></h2>
 
     <div class="tb-grid reveal">
       <?php foreach($team as $index => $member): ?>
@@ -237,52 +248,34 @@ $partners = $stmt_partners->fetchAll();
       <h2>Our Team At Work</h2>
     </div>
 
-    <div class="gallery-showcase reveal">
-      <div class="featured-section">
-        <img id="featured-img" src="images/team/12.jpg" alt="Team at work" class="featured-image">
-        <div class="featured-caption">
-          <img src="images/team/profile.jpg" alt="Profile" class="caption-avatar">
-          <div class="caption-text">
-            <h4>Design Plus</h4>
-            <p>Behind the scenes moments</p>
-          </div>
+    <div class="gallery-showcase" <?php if ($gallery_bg_image): ?>style="background-image: url('<?php echo htmlspecialchars($gallery_bg_image); ?>');"<?php endif; ?>>
+      <?php if ($gallery_bg_is_video): ?>
+        <video class="gallery-bg-video" autoplay muted loop playsinline>
+          <source src="<?php echo htmlspecialchars($gallery_bg_path); ?>" type="video/<?php echo pathinfo($gallery_bg_path, PATHINFO_EXTENSION); ?>">
+          Your browser does not support the video tag.
+        </video>
+      <?php endif; ?>
+      <?php foreach ($gallery_photos as $index => $photo): ?>
+        <div class="gallery-photo-tile" style="--x: <?php echo $photo['position_x']; ?>px; --y: <?php echo $photo['position_y']; ?>px;" data-index="<?php echo $index; ?>">
+          <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
+          <p class="photo-label"><?php echo htmlspecialchars($photo['photo_label']); ?></p>
         </div>
-        <button id="carousel-pause-btn" class="carousel-pause-btn" aria-label="Pause gallery auto-play" title="Pause/Resume">
-          <svg class="pause-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect x="6" y="4" width="3" height="16" fill="currentColor"/>
-            <rect x="15" y="4" width="3" height="16" fill="currentColor"/>
-          </svg>
-          <svg class="play-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="5,3 19,12 5,21" fill="currentColor"/>
-          </svg>
-        </button>
-      </div>
+      <?php endforeach; ?>
 
-      <div class="gallery-thumbnails" id="thumbnailsCarousel">
-        <div class="thumb-item" data-src="images/team/12.jpg">
-          <img src="images/team/12.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/13.jpg">
-          <img src="images/team/13.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/14.jpg">
-          <img src="images/team/14.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/15.jpg">
-          <img src="images/team/15.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/16.jpg">
-          <img src="images/team/16.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/17.jpg">
-          <img src="images/team/17.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/18.jpg">
-          <img src="images/team/18.jpg" alt="Team work" loading="lazy">
-        </div>
-        <div class="thumb-item" data-src="images/team/19.jpg">
-          <img src="images/team/19.jpg" alt="Team work" loading="lazy">
-        </div>
+      <!-- SVG connecting lines (generated by JavaScript) -->
+      <svg class="gallery-lines" id="gallery-lines-svg" width="100%" height="100%"></svg>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="gallery-zoom-modal" class="gallery-zoom-modal">
+      <div class="gallery-zoom-close">&times;</div>
+      <div class="gallery-zoom-container">
+        <img id="gallery-zoom-image" src="" alt="">
+        <p id="gallery-zoom-label" class="gallery-zoom-label"></p>
+      </div>
+      <div class="gallery-zoom-nav">
+        <button class="gallery-zoom-prev">&larr;</button>
+        <button class="gallery-zoom-next">&rarr;</button>
       </div>
     </div>
   </div>
@@ -291,311 +284,415 @@ $partners = $stmt_partners->fetchAll();
 <style>
 .gallery-section { padding: 80px 0; background: #f9f9f9; }
 
+/* ═══════════ GALLERY — SCATTERED GRID (NEW) ═══════════ */
+
 .gallery-showcase {
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 50px;
-  align-items: flex-start;
-}
-
-.featured-section {
   position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.featured-image {
   width: 100%;
-  border-radius: 32px 32px 0 0;
-  height: 450px;
-  object-fit: cover;
-  display: block;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  transition: opacity 0.3s ease;
-}
-
-#featured-img:focus-visible {
-  outline: 2px solid #333;
-  outline-offset: 2px;
-}
-
-.featured-caption {
-  background: #fff;
-  border-radius: 0 0 32px 32px;
-  padding: 20px;
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-
-.caption-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #f0f0f0;
-}
-
-.caption-text {
-  flex: 1;
-}
-
-.caption-text h4 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.caption-text p {
-  margin: 2px 0 0;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.carousel-pause-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #ddd;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   padding: 0;
-  transition: background 0.2s, border-color 0.2s;
-  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 600px;
+}
+.gallery-showcase::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.85); /* Lighten the background */
+  pointer-events: none;
+  z-index: 1;
 }
 
-.carousel-pause-btn:hover {
-  background: #fff;
-  border-color: #999;
-}
-
-.carousel-pause-btn svg {
-  width: 20px;
-  height: 20px;
-  color: #333;
-}
-
-.carousel-pause-btn.playing .play-icon {
-  display: none;
-}
-
-.carousel-pause-btn.playing .pause-icon {
-  display: block;
-}
-
-.carousel-pause-btn.paused .play-icon {
-  display: block;
-}
-
-.carousel-pause-btn.paused .pause-icon {
-  display: none;
-}
-
-.gallery-thumbnails {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  padding: 4px 0;
-  flex-shrink: 0;
-  scrollbar-width: none;
-  flex-wrap: nowrap;
-}
-
-.gallery-thumbnails::-webkit-scrollbar {
-  display: none;
-}
-
-.thumb-item {
-  position: relative;
-  min-width: 60px;
-  width: 60px;
-  height: 520px;
-  border-radius: 32px;
-  overflow: hidden;
-  cursor: default;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-  flex-shrink: 0;
-  flex-grow: 0;
-}
-
-.thumb-item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 50px rgba(0,0,0,0.18);
-}
-
-.thumb-item img {
+.gallery-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 0;
 }
 
+/* Desktop (>1024px): Absolute positioned scatter */
+.gallery-photo-tile {
+  position: absolute;
+  left: var(--x, 0);
+  top: var(--y, 0);
+  width: 160px;
+  height: 200px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+}
+
+.gallery-photo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-photo-tile:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+
+/* Gallery rotation animation */
+@keyframes galleryRotate {
+  0%, 100% { opacity: 1; }
+  25% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  75% { opacity: 0.6; }
+}
+
+.gallery-photo-tile.rotating {
+  animation: galleryRotate 4s ease-in-out infinite;
+}
+
+.gallery-photo-tile.rotating:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.gallery-photo-tile.rotating:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.gallery-photo-tile.rotating:nth-child(4) {
+  animation-delay: 1.5s;
+}
+
+.gallery-photo-tile.rotating:nth-child(5) {
+  animation-delay: 2s;
+}
+
+.gallery-photo-tile.rotating:nth-child(6) {
+  animation-delay: 2.5s;
+}
+
+.gallery-photo-tile.rotating:nth-child(7) {
+  animation-delay: 3s;
+}
+
+.gallery-photo-tile.rotating:nth-child(8) {
+  animation-delay: 3.5s;
+}
+
+/* Zoom Modal */
+.gallery-zoom-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-zoom-modal.active {
+  display: flex;
+  opacity: 1;
+}
+
+.gallery-zoom-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.gallery-zoom-close:hover {
+  color: #ccc;
+}
+
+.gallery-zoom-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#gallery-zoom-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.gallery-zoom-label {
+  color: #fff;
+  margin-top: 15px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.gallery-zoom-nav {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 1001;
+}
+
+.gallery-zoom-nav button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.gallery-zoom-nav button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.photo-label {
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+
+.gallery-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gallery-lines path {
+  stroke: #333;
+  stroke-width: 1.5px;
+  opacity: 0.25;
+  fill: none;
+}
+
+/* Tablet (768px–1024px): 3×3 Grid */
 @media (max-width: 1024px) {
   .gallery-showcase {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    height: auto;
+    position: static;
+    padding: 40px 20px;
   }
 
-  .featured-image {
-    height: 350px;
+  .gallery-photo-tile {
+    position: static;
+    width: auto;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .gallery-photo-tile img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-label {
+    position: static;
+    bottom: auto;
+    margin-top: 12px;
+    white-space: normal;
+    font-size: 0.9rem;
+  }
+
+  .gallery-lines {
+    display: none;
   }
 }
 
+/* Mobile (<768px): 2×4 Grid */
 @media (max-width: 768px) {
-  .gallery-thumbnails {
-    display: flex;
-    flex-direction: column;
-    scrollbar-width: auto;
-    height: auto;
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
+  .gallery-showcase {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 30px 16px;
   }
 
-  .gallery-thumbnails::-webkit-scrollbar {
-    display: block;
-    width: 8px;
+  .gallery-photo-tile {
+    aspect-ratio: 3 / 4;
   }
 
-  .gallery-thumbnails::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-  }
-
-  .gallery-thumbnails::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
-
-  .gallery-thumbnails::-webkit-scrollbar-thumb:hover {
-    background: #999;
-  }
-
-  .thumb-item {
-    width: 100%;
-    height: 60px;
-    flex-direction: row;
-    min-width: 100%;
+  .photo-label {
+    font-size: 0.85rem;
+    margin-top: 8px;
   }
 }
 </style>
 
 <script>
-var carouselIndex = 1;
-var autoCarouselInterval;
-var isPausedByUser = false;
-var isHovered = false;
-var isFocused = false;
+// Gallery data from PHP (8 photos)
+var galleryData = <?php echo json_encode($gallery_photos); ?>;
 
-function autoCarousel() {
-  var thumbs = document.querySelectorAll('.thumb-item');
-  if(thumbs.length === 0) return;
+// Calculate gallery container height based on photo positions
+function calculateGalleryHeight() {
+  var showcase = document.querySelector('.gallery-showcase');
+  if (!showcase || window.innerWidth <= 1024) return; // Only on desktop
 
-  var nextThumb = thumbs[carouselIndex % thumbs.length];
-  var src = nextThumb.getAttribute('data-src');
+  var tiles = document.querySelectorAll('.gallery-photo-tile, .gallery-figure');
+  var maxY = 0;
 
-  // Fade out, change src, fade in
-  var featuredImg = document.getElementById('featured-img');
-  featuredImg.style.opacity = '0';
-  setTimeout(function() {
-    featuredImg.src = src;
-    // Alt text stays constant (initialized in HTML)
-    featuredImg.style.opacity = '1';
-  }, 150);
+  tiles.forEach(function(tile) {
+    var top = parseInt(tile.style.top.replace('px', '')) || 0;
+    var height = tile.offsetHeight || 200;
+    maxY = Math.max(maxY, top + height);
+  });
 
-  // Update opacity states for visual feedback
-  document.querySelectorAll('.thumb-item').forEach(t => t.style.opacity = '0.3');
-  nextThumb.style.opacity = '1';
-
-  carouselIndex++;
+  showcase.style.height = (maxY + 60) + 'px'; // 60px buffer for labels
 }
 
-function updatePauseState() {
-  if (isHovered || isFocused || isPausedByUser) {
-    clearInterval(autoCarouselInterval);
-  } else if (!reduceMotion) {
-    startCarousel();
+// Generate SVG connecting lines between photo tiles
+function generateConnectingLines() {
+  if (window.innerWidth <= 1024) return; // Desktop only
+
+  var svg = document.getElementById('gallery-lines-svg');
+  if (!svg) return;
+
+  // Clear previous paths
+  svg.innerHTML = '';
+
+  var tiles = document.querySelectorAll('.gallery-photo-tile, .gallery-figure');
+  var positions = [];
+
+  tiles.forEach(function(tile) {
+    var rect = tile.getBoundingClientRect();
+    var svgRect = svg.getBoundingClientRect();
+
+    positions.push({
+      x: rect.left - svgRect.left + rect.width / 2,
+      y: rect.top - svgRect.top + rect.height / 2
+    });
+  });
+
+  // Draw lines between adjacent tiles
+  for (var i = 0; i < positions.length - 1; i++) {
+    var p1 = positions[i];
+    var p2 = positions[i + 1];
+
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M ' + p1.x + ' ' + p1.y + ' L ' + p2.x + ' ' + p2.y);
+    svg.appendChild(path);
   }
 }
 
-var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function startCarousel() {
-  clearInterval(autoCarouselInterval);
-  if (!reduceMotion && !isPausedByUser) {
-    autoCarouselInterval = setInterval(autoCarousel, 4000);
-  }
-}
-
+// Run on load and resize
 document.addEventListener('DOMContentLoaded', function() {
-  var thumbs = document.querySelectorAll('.thumb-item');
-  if(thumbs.length === 0) return;
+  calculateGalleryHeight();
+  generateConnectingLines();
+  initGalleryRotation();
+  initGalleryZoom();
+});
 
-  // Set first thumbnail as initially active
-  thumbs[0].style.opacity = '1';
-  document.querySelectorAll('.thumb-item:not(:first-child)').forEach(t => t.style.opacity = '0.3');
+window.addEventListener('resize', function() {
+  calculateGalleryHeight();
+  generateConnectingLines();
+});
 
-  // Start auto carousel every 4 seconds
-  startCarousel();
+// Gallery rotation animation
+function initGalleryRotation() {
+  const tiles = document.querySelectorAll('.gallery-photo-tile');
+  tiles.forEach(tile => tile.classList.add('rotating'));
+}
 
-  // Pause/play button control
-  var pauseBtn = document.getElementById('carousel-pause-btn');
-  if(pauseBtn) {
-    pauseBtn.addEventListener('click', function() {
-      isPausedByUser = !isPausedByUser;
-      updatePauseState();
+// Gallery zoom functionality
+function initGalleryZoom() {
+  const modal = document.getElementById('gallery-zoom-modal');
+  const closeBtn = document.querySelector('.gallery-zoom-close');
+  const zoomImage = document.getElementById('gallery-zoom-image');
+  const zoomLabel = document.getElementById('gallery-zoom-label');
+  const prevBtn = document.querySelector('.gallery-zoom-prev');
+  const nextBtn = document.querySelector('.gallery-zoom-next');
+  const zoomables = document.querySelectorAll('.gallery-photo-zoomable');
+  let currentZoomIndex = 0;
 
-      // Update button appearance
-      if (isPausedByUser) {
-        pauseBtn.classList.add('paused');
-        pauseBtn.classList.remove('playing');
-      } else {
-        pauseBtn.classList.add('playing');
-        pauseBtn.classList.remove('paused');
+  function showZoom(index) {
+    if (index < 0 || index >= zoomables.length) return;
+    currentZoomIndex = index;
+    const img = zoomables[index];
+    zoomImage.src = img.dataset.zoomSrc;
+    zoomLabel.textContent = img.dataset.label;
+    modal.classList.add('active');
+  }
+
+  zoomables.forEach((img, index) => {
+    img.style.cursor = 'pointer';
+    img.parentElement.addEventListener('click', function(e) {
+      if (e.target.tagName === 'IMG' || e.target.parentElement.classList.contains('gallery-photo-tile')) {
+        showZoom(index);
       }
     });
-    // Initialize button state
-    pauseBtn.classList.add('playing');
-  }
+  });
 
-  // Hover listeners with coordinated pause state
-  var featuredSection = document.querySelector('.featured-section');
-  if(featuredSection) {
-    featuredSection.addEventListener('mouseenter', function() {
-      isHovered = true;
-      updatePauseState();
-    });
+  closeBtn.addEventListener('click', function() {
+    modal.classList.remove('active');
+  });
 
-    featuredSection.addEventListener('mouseleave', function() {
-      isHovered = false;
-      updatePauseState();
-    });
-  }
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
 
-  // Focus listeners with coordinated pause state
-  var featuredImg = document.getElementById('featured-img');
-  if(featuredImg) {
-    featuredImg.setAttribute('tabindex', '0');
-    featuredImg.addEventListener('focus', function() {
-      isFocused = true;
-      updatePauseState();
-    });
-    featuredImg.addEventListener('blur', function() {
-      isFocused = false;
-      updatePauseState();
-    });
-  }
-});
+  prevBtn.addEventListener('click', function() {
+    showZoom(currentZoomIndex - 1);
+  });
+
+  nextBtn.addEventListener('click', function() {
+    showZoom(currentZoomIndex + 1);
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') showZoom(currentZoomIndex - 1);
+    if (e.key === 'ArrowRight') showZoom(currentZoomIndex + 1);
+    if (e.key === 'Escape') modal.classList.remove('active');
+  });
+}
 </script>
 
 <footer id="site-footer" data-include="footer.html"></footer>
