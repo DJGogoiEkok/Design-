@@ -248,18 +248,11 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       <h2>Our Team At Work</h2>
     </div>
 
-    <div class="mondrian-gallery-container reveal">
-      <div class="mondrian-grid">
+    <div class="diamond-gallery-container reveal">
+      <div class="diamond-grid">
         <?php foreach ($gallery_photos as $index => $photo): ?>
-          <div class="mondrian-tile tile-<?php echo ($index % 6) + 1; ?>" data-index="<?php echo $index; ?>">
-            <?php if (!empty($photo['photo_label'])): ?>
-              <p class="mondrian-label"><?php echo htmlspecialchars($photo['photo_label']); ?></p>
-            <?php endif; ?>
-            <div class="mondrian-img-wrapper">
-              <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
-            </div>
-            <div class="mondrian-line-h"></div>
-            <div class="mondrian-line-v"></div>
+          <div class="diamond-tile diamond-<?php echo ($index % 7) + 1; ?>" data-index="<?php echo $index; ?>">
+            <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
           </div>
         <?php endforeach; ?>
       </div>
@@ -281,125 +274,82 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 </section>
 
 <style>
-.gallery-section { padding: 80px 0; background: #000; color: #fff; }
-.gallery-section .section-title h2 { color: #fff; }
+.gallery-section { padding: 120px 0; background: #fff; color: #333; }
+.gallery-section .section-title h2 { color: #333; }
 .gallery-section .section-title .eyebrow { color: var(--gold-soft); }
 
-/* ═══════════ GALLERY — SCATTERED GRID (NEW) ═══════════ */
-/* ═══════════ GALLERY — MONDRIAN GRID ═══════════ */
-.mondrian-gallery-container {
-  background: #000;
-  padding: 60px 20px;
+/* ═══════════ GALLERY — DIAMOND GRID ═══════════ */
+.diamond-gallery-container {
+  background: #fff;
+  padding: 60px 20px 100px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 
-.mondrian-grid {
+.diamond-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 240px;
-  gap: 0; /* Gaps are handled by borders/lines */
-  max-width: 1000px;
-  margin: 0 auto;
+  grid-template-columns: repeat(4, 150px);
+  grid-template-rows: repeat(4, 150px);
+  gap: 12px;
+  transform: rotate(45deg);
 }
 
-.mondrian-tile {
+.diamond-tile {
   position: relative;
-  /* Thick white borders create the internal grid lines */
-  border: 1px solid #fff; 
-}
-
-.mondrian-img-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 2;
   overflow: hidden;
-  background: #000;
+  background: #f0f0f0;
 }
 
-.mondrian-img-wrapper img {
-  width: 100%;
-  height: 100%;
+.diamond-tile img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
   object-fit: cover;
-  display: block;
-  opacity: 0.8;
-  filter: sepia(0.3) contrast(1.1) brightness(0.9);
-  transition: all 0.3s ease;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transition: transform 0.4s ease;
 }
 
-.mondrian-tile:hover .mondrian-img-wrapper img {
-  opacity: 1;
-  filter: none;
+.diamond-tile:hover img {
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
   cursor: pointer;
 }
 
-.mondrian-label {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: #fff;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  z-index: 3;
-  margin: 0;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-/* Extending lines past the grid using pseudo-elements */
-.mondrian-line-h, .mondrian-line-v {
-  position: absolute;
-  background: #fff;
-  z-index: 1;
-}
-
-.mondrian-line-h {
-  height: 2px;
-  left: -200px;
-  right: -200px;
-  display: none; /* Only show on specific tiles */
-}
-
-.mondrian-line-v {
-  width: 2px;
-  top: -200px;
-  bottom: -200px;
-  display: none;
-}
-
-/* Specific Asymmetrical Placement */
-.tile-1 { grid-column: 2 / 3; grid-row: 1 / 3; border-top: 2px solid #fff; border-left: 2px solid #fff; }
-.tile-1 .mondrian-line-v { display: block; left: -2px; }
-.tile-1 .mondrian-line-h { display: block; top: -2px; right: auto; width: 100vw; }
-.tile-1 .mondrian-label { top: -22px; left: 0; }
-
-.tile-2 { grid-column: 3 / 5; grid-row: 1 / 2; border-top: 2px solid #fff; border-right: 2px solid #fff; }
-.tile-2 .mondrian-line-h { display: block; bottom: -2px; left: auto; width: 100vw; }
-
-.tile-3 { grid-column: 1 / 2; grid-row: 2 / 4; border-left: 2px solid #fff; }
-.tile-3 .mondrian-line-h { display: block; top: -2px; right: auto; width: 100vw; }
-.tile-3 .mondrian-label { top: -22px; left: 0; }
-
-.tile-4 { grid-column: 3 / 4; grid-row: 2 / 3; }
-
-.tile-5 { grid-column: 4 / 5; grid-row: 2 / 4; border-right: 2px solid #fff; }
-.tile-5 .mondrian-line-v { display: block; left: -2px; }
-
-.tile-6 { grid-column: 1 / 3; grid-row: 4 / 5; border-bottom: 2px solid #fff; border-left: 2px solid #fff; }
-.tile-6 .mondrian-label { top: auto; bottom: -22px; left: 0; }
+/* Specific Asymmetrical Placement for first 7 photos */
+.diamond-1 { grid-area: 2 / 2 / 4 / 4; } /* Center Large */
+.diamond-2 { grid-area: 1 / 2 / 2 / 3; } /* Top-Left */
+.diamond-3 { grid-area: 2 / 1 / 3 / 2; } /* Far-Left */
+.diamond-4 { grid-area: 3 / 1 / 4 / 2; } /* Bottom-Left */
+.diamond-5 { grid-area: 2 / 4 / 3 / 5; } /* Top-Right */
+.diamond-6 { grid-area: 3 / 4 / 4 / 5; } /* Far-Right */
+.diamond-7 { grid-area: 4 / 3 / 5 / 4; } /* Bottom-Right */
 
 /* Responsive Adjustments */
-@media (max-width: 860px) {
-  .mondrian-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 200px;
+@media (max-width: 1000px) {
+  .diamond-grid {
+    grid-template-columns: repeat(4, 120px);
+    grid-template-rows: repeat(4, 120px);
+    gap: 10px;
   }
-  .tile-1, .tile-2, .tile-3, .tile-4, .tile-5, .tile-6 {
-    grid-column: span 1;
-    grid-row: span 1;
-    border: 1px solid #fff;
+}
+
+@media (max-width: 768px) {
+  .diamond-grid {
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(4, 80px);
+    gap: 8px;
   }
-  .mondrian-line-h, .mondrian-line-v { display: none !important; }
-  .mondrian-label { top: 10px !important; bottom: auto !important; left: 10px !important; }
+}
+
+@media (max-width: 500px) {
+  .diamond-grid {
+    grid-template-columns: repeat(4, 60px);
+    grid-template-rows: repeat(4, 60px);
+    gap: 6px;
+  }
 }
 </style>
 
