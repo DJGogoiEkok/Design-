@@ -16,7 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_mimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+            $mime = mime_content_type($_FILES['image']['tmp_name']);
+            if (!in_array($ext, $allowed_exts) || !in_array($mime, $allowed_mimes)) {
+                die('Invalid file type.');
+            }
+            $file_name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', basename($_FILES['image']['name']));
             $target_file = $upload_dir . $file_name;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_path = 'images/site/gallery_uploads/' . $file_name;
@@ -41,7 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_mimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+            $mime = mime_content_type($_FILES['image']['tmp_name']);
+            if (!in_array($ext, $allowed_exts) || !in_array($mime, $allowed_mimes)) {
+                die('Invalid file type.');
+            }
+            $file_name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', basename($_FILES['image']['name']));
             $target_file = $upload_dir . $file_name;
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_path = 'images/site/gallery_uploads/' . $file_name;
