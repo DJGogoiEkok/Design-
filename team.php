@@ -248,10 +248,23 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       <h2>Our Team At Work</h2>
     </div>
 
-    <div class="diamond-gallery-container reveal">
-      <div class="diamond-grid">
+    <div class="photo-collage-container reveal">
+      <div class="photo-collage-wrapper">
+        <?php 
+          $total = count($gallery_photos);
+          $center_idx = floor(($total - 1) / 2); // Find the exact middle index
+        ?>
         <?php foreach ($gallery_photos as $index => $photo): ?>
-          <div class="diamond-tile diamond-<?php echo ($index % 7) + 1; ?>" data-index="<?php echo $index; ?>">
+          <?php 
+            $distance = abs($index - $center_idx);
+            $z_index = 20 - $distance;
+            
+            if ($distance == 0) $size_class = 'frame-lg';
+            elseif ($distance == 1) $size_class = 'frame-md';
+            elseif ($distance == 2) $size_class = 'frame-sm';
+            else $size_class = 'frame-xs';
+          ?>
+          <div class="collage-frame <?php echo $size_class; ?>" style="z-index: <?php echo $z_index; ?>;" data-index="<?php echo $index; ?>">
             <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
           </div>
         <?php endforeach; ?>
@@ -274,82 +287,72 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 </section>
 
 <style>
-.gallery-section { padding: 120px 0; background: #fff; color: #333; }
+.gallery-section { 
+  padding: 80px 0 160px 0; 
+  background: linear-gradient(to bottom, #f9f9f9 0%, #e0e0e0 50%, #888888 100%); 
+  color: #333; 
+  overflow: hidden;
+}
 .gallery-section .section-title h2 { color: #333; }
-.gallery-section .section-title .eyebrow { color: var(--gold-soft); }
+.gallery-section .section-title .eyebrow { color: #777; }
 
-/* ═══════════ GALLERY — DIAMOND GRID ═══════════ */
-.diamond-gallery-container {
-  background: #fff;
-  padding: 60px 20px 100px 20px;
+/* ═══════════ GALLERY — PHOTO COLLAGE ═══════════ */
+.photo-collage-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  margin-top: 60px;
 }
 
-.diamond-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 150px);
-  grid-template-rows: repeat(4, 150px);
-  gap: 12px;
-  transform: rotate(45deg);
-}
-
-.diamond-tile {
+.photo-collage-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  overflow: hidden;
-  background: #f0f0f0;
 }
 
-.diamond-tile img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 150%;
-  height: 150%;
+.collage-frame {
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  -webkit-box-reflect: below 2px linear-gradient(transparent 75%, rgba(255,255,255,0.4));
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.collage-frame img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  transition: transform 0.4s ease;
+  background: #222;
+  display: block;
 }
 
-.diamond-tile:hover img {
-  transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
+.frame-lg { width: 340px; height: 340px; margin: 0 -40px; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
+.frame-md { width: 280px; height: 280px; margin: 0 -30px; }
+.frame-sm { width: 220px; height: 220px; margin: 0 -20px; }
+.frame-xs { width: 160px; height: 160px; margin: 0 -15px; }
+
+.collage-frame:hover {
+  transform: translateY(-20px) scale(1.05);
+  z-index: 50 !important;
   cursor: pointer;
 }
 
-/* Specific Asymmetrical Placement for first 7 photos */
-.diamond-1 { grid-area: 2 / 2 / 4 / 4; } /* Center Large */
-.diamond-2 { grid-area: 1 / 2 / 2 / 3; } /* Top-Left */
-.diamond-3 { grid-area: 2 / 1 / 3 / 2; } /* Far-Left */
-.diamond-4 { grid-area: 3 / 1 / 4 / 2; } /* Bottom-Left */
-.diamond-5 { grid-area: 2 / 4 / 3 / 5; } /* Top-Right */
-.diamond-6 { grid-area: 3 / 4 / 4 / 5; } /* Far-Right */
-.diamond-7 { grid-area: 4 / 3 / 5 / 4; } /* Bottom-Right */
-
-/* Responsive Adjustments */
-@media (max-width: 1000px) {
-  .diamond-grid {
-    grid-template-columns: repeat(4, 120px);
-    grid-template-rows: repeat(4, 120px);
-    gap: 10px;
-  }
+/* Mobile */
+@media (max-width: 900px) {
+  .frame-lg { width: 240px; height: 240px; margin: 0 -20px; }
+  .frame-md { width: 180px; height: 180px; margin: 0 -15px; }
+  .frame-sm { width: 140px; height: 140px; margin: 0 -10px; }
+  .frame-xs { width: 100px; height: 100px; margin: 0 -5px; }
 }
 
-@media (max-width: 768px) {
-  .diamond-grid {
-    grid-template-columns: repeat(4, 80px);
-    grid-template-rows: repeat(4, 80px);
-    gap: 8px;
-  }
-}
-
-@media (max-width: 500px) {
-  .diamond-grid {
-    grid-template-columns: repeat(4, 60px);
-    grid-template-rows: repeat(4, 60px);
-    gap: 6px;
-  }
+@media (max-width: 600px) {
+  .frame-lg { width: 180px; height: 180px; margin: 0 -15px; }
+  .frame-md { width: 140px; height: 140px; margin: 0 -10px; }
+  .frame-sm { width: 100px; height: 100px; margin: 0 -5px; }
+  .frame-xs { width: 70px; height: 70px; margin: 0 -3px; }
+  .collage-frame { padding: 5px; }
 }
 </style>
 
