@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 800" width="3000" height="800">
+  <defs>
+    <!-- Drop shadow to define the yellow figures against the yellow background -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#a68418" flood-opacity="0.8"/>
+    </filter>
+    
+    <!-- Glow effect for the center white figure -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#a68418" flood-opacity="0.8"/>
+    </filter>
+
+    <!-- Standard Icon Proportions -->
+    <g id="yellow-person" fill="#eab308" filter="url(#shadow)">
+      <!-- Head -->
+      <circle cx="0" cy="-110" r="28" />
+      <!-- Body -->
+      <path d="M -35 -70 L 35 -70 A 10 10 0 0 1 45 -60 L 45 40 A 5 5 0 0 1 40 45 L -40 45 A 5 5 0 0 1 -45 40 L -45 -60 A 10 10 0 0 1 -35 -70 Z" />
+      <!-- Legs -->
+      <rect x="-35" y="50" width="25" height="90" rx="12.5" />
+      <rect x="10" y="50" width="25" height="90" rx="12.5" />
+      <!-- Arms Down -->
+      <rect x="-80" y="-70" width="25" height="100" rx="12.5" />
+      <rect x="55" y="-70" width="25" height="100" rx="12.5" />
+    </g>
+
+    <!-- White Person (Arms Raised) -->
+    <g id="white-person" fill="#ffffff" filter="url(#glow)">
+      <!-- Head -->
+      <circle cx="0" cy="-110" r="28" />
+      <!-- Body -->
+      <path d="M -35 -70 L 35 -70 A 10 10 0 0 1 45 -60 L 45 40 A 5 5 0 0 1 40 45 L -40 45 A 5 5 0 0 1 -45 40 L -45 -60 A 10 10 0 0 1 -35 -70 Z" />
+      <!-- Legs -->
+      <rect x="-35" y="50" width="25" height="90" rx="12.5" />
+      <rect x="10" y="50" width="25" height="90" rx="12.5" />
+      <!-- Arms Up -->
+      <!-- We use a path with stroke to perfectly mimic the bent arm of the icon -->
+      <path d="M -40 -60 C -70 -60, -70 -70, -60 -130" fill="none" stroke="#ffffff" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 40 -60 C 70 -60, 70 -70, 60 -130" fill="none" stroke="#ffffff" stroke-width="25" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </defs>
+
+  <!-- Background exactly matching the warm yellow color -->
+  <rect width="100%" height="100%" fill="#eab308" />
+
+  <!-- Container for all figures, centered horizontally, shifted down slightly -->
+  <g transform="translate(1500, 480)">
+    <!-- 4 figures on the left -->
+    <use href="#yellow-person" x="-1000" />
+    <use href="#yellow-person" x="-750" />
+    <use href="#yellow-person" x="-500" />
+    <use href="#yellow-person" x="-250" />
+    
+    <!-- Center white figure -->
+    <use href="#white-person" x="0" />
+    
+    <!-- 4 figures on the right -->
+    <use href="#yellow-person" x="250" />
+    <use href="#yellow-person" x="500" />
+    <use href="#yellow-person" x="750" />
+    <use href="#yellow-person" x="1000" />
+  </g>
+</svg>
