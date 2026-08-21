@@ -280,18 +280,6 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       </div>
     </div>
 
-    <!-- Image Zoom Modal -->
-    <div id="gallery-zoom-modal" class="gallery-zoom-modal">
-      <div class="gallery-zoom-close">&times;</div>
-      <div class="gallery-zoom-container">
-        <img id="gallery-zoom-image" src="" alt="">
-        <p id="gallery-zoom-label" class="gallery-zoom-label"></p>
-      </div>
-      <div class="gallery-zoom-nav">
-        <button class="gallery-zoom-prev">&larr;</button>
-        <button class="gallery-zoom-next">&rarr;</button>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -477,7 +465,6 @@ var galleryData = <?php echo json_encode($gallery_photos); ?>;
 // Run on load
 document.addEventListener('DOMContentLoaded', function() {
   initSlider();
-  initGalleryZoom();
 });
 
 function initSlider() {
@@ -525,61 +512,7 @@ function initSlider() {
   }, 5000);
 }
 
-// Gallery zoom functionality
-function initGalleryZoom() {
-  const modal = document.getElementById('gallery-zoom-modal');
-  const closeBtn = document.querySelector('.gallery-zoom-close');
-  const zoomImage = document.getElementById('gallery-zoom-image');
-  const zoomLabel = document.getElementById('gallery-zoom-label');
-  const prevBtn = document.querySelector('.gallery-zoom-prev');
-  const nextBtn = document.querySelector('.gallery-zoom-next');
-  const zoomables = document.querySelectorAll('.gallery-photo-zoomable');
-  let currentZoomIndex = 0;
 
-  function showZoom(index) {
-    if (index < 0 || index >= zoomables.length) return;
-    currentZoomIndex = index;
-    const img = zoomables[index];
-    zoomImage.src = img.dataset.zoomSrc;
-    zoomLabel.textContent = img.dataset.label;
-    modal.classList.add('active');
-  }
-
-  zoomables.forEach((img, index) => {
-    img.style.cursor = 'pointer';
-    img.parentElement.addEventListener('click', function(e) {
-      if (e.target.tagName === 'IMG' || e.target.parentElement.classList.contains('gallery-photo-tile')) {
-        showZoom(index);
-      }
-    });
-  });
-
-  closeBtn.addEventListener('click', function() {
-    modal.classList.remove('active');
-  });
-
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      modal.classList.remove('active');
-    }
-  });
-
-  prevBtn.addEventListener('click', function() {
-    showZoom(currentZoomIndex - 1);
-  });
-
-  nextBtn.addEventListener('click', function() {
-    showZoom(currentZoomIndex + 1);
-  });
-
-  // Keyboard navigation
-  document.addEventListener('keydown', function(e) {
-    if (!modal.classList.contains('active')) return;
-    if (e.key === 'ArrowLeft') showZoom(currentZoomIndex - 1);
-    if (e.key === 'ArrowRight') showZoom(currentZoomIndex + 1);
-    if (e.key === 'Escape') modal.classList.remove('active');
-  });
-}
 </script>
 
 <footer id="site-footer" data-include="footer.html"></footer>
