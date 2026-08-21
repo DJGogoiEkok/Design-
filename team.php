@@ -301,14 +301,12 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 
 .slider-3d-wrapper {
   position: relative;
-  width: 2000px;
-  max-width: 100vw;
-  height: 900px;
-  max-height: 95vh;
+  width: 100vw;
+  height: 90vh; /* Scale perfectly to the user's screen */
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff; /* White background behind the torn paper */
+  background: #fff;
 }
 
 /* Base Frame (replaces old .slider-frame to act as photo container) */
