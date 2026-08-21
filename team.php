@@ -323,9 +323,9 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 
 .slider-3d-wrapper {
   position: relative;
-  width: 900px;
+  width: 1170px;
   max-width: 95vw;
-  height: 450px;
+  height: 585px;
   display: flex;
   justify-content: center;
   align-items: center;
