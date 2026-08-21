@@ -276,12 +276,9 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
           
           <!-- Dots -->
           <div class="slider-dots">
-            <?php 
-              $totalPairs = ceil(count($gallery_photos) / 2);
-              for ($i = 0; $i < $totalPairs; $i++): 
-            ?>
-              <button class="slider-dot <?php echo $i === 0 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>"></button>
-            <?php endfor; ?>
+            <?php foreach ($gallery_photos as $index => $photo): ?>
+              <button class="slider-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>"></button>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
@@ -393,7 +390,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 .slider-slide {
   position: absolute;
   top: 0;
-  width: calc(50% - 10px);
+  width: 100%;
   height: 100%;
   opacity: 0;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -401,22 +398,8 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   transform: translateX(50px) scale(0.95);
 }
 
-.slider-slide[data-pos="left"] {
-  left: 0;
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
-}
-
-.slider-slide[data-pos="right"] {
-  left: calc(50% + 10px);
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
-}
-
 .slider-slide[data-pos="center"] {
-  left: calc(25% + 5px);
+  left: 0;
   opacity: 1;
   transform: translateX(0) scale(1);
   pointer-events: auto;
@@ -429,7 +412,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 }
 
 .slider-slide[data-pos="hidden-right"] {
-  left: calc(50% + 10px);
+  left: 0;
   opacity: 0;
   transform: translateX(50px) scale(0.95);
 }
@@ -445,7 +428,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 .slider-slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* changed from cover to contain */
 }
 
 .slider-label {
@@ -528,24 +511,17 @@ function initSlider() {
   const dots = document.querySelectorAll('.slider-dot');
   const prevBtn = document.querySelector('.slider-prev');
   const nextBtn = document.querySelector('.slider-next');
-  let currentSlide = 0; // index of the first active slide (even number)
-  const totalPairs = Math.ceil(slides.length / 2);
+  let currentSlide = 0;
 
-  function goToSlide(pairIndex) {
-    if (pairIndex < 0) pairIndex = totalPairs - 1;
-    if (pairIndex >= totalPairs) pairIndex = 0;
+  function goToSlide(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
     
-    currentSlide = pairIndex * 2;
+    currentSlide = index;
     
     slides.forEach((s, idx) => {
       if (idx === currentSlide) {
-        if (!slides[currentSlide + 1]) {
-           s.dataset.pos = "center";
-        } else {
-           s.dataset.pos = "left";
-        }
-      } else if (idx === currentSlide + 1) {
-        s.dataset.pos = "right";
+        s.dataset.pos = "center";
       } else if (idx < currentSlide) {
         s.dataset.pos = "hidden-left";
       } else {
@@ -554,13 +530,13 @@ function initSlider() {
     });
 
     dots.forEach((d, idx) => {
-      if (idx === pairIndex) d.classList.add('active');
+      if (idx === currentSlide) d.classList.add('active');
       else d.classList.remove('active');
     });
   }
 
-  prevBtn.addEventListener('click', () => goToSlide(Math.floor(currentSlide / 2) - 1));
-  nextBtn.addEventListener('click', () => goToSlide(Math.floor(currentSlide / 2) + 1));
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
   
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => goToSlide(index));
@@ -571,7 +547,7 @@ function initSlider() {
 
   // Optional: Auto-play
   setInterval(() => {
-    goToSlide(Math.floor(currentSlide / 2) + 1);
+    goToSlide(currentSlide + 1);
   }, 5000);
 }
 
