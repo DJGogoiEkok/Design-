@@ -332,10 +332,11 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('images/torn_frame.png');
+  background-image: url('images/torn_original.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
+  mix-blend-mode: multiply;
   z-index: 5;
   pointer-events: none; /* allow clicking photos underneath if needed */
 }
