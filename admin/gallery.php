@@ -16,12 +16,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
-                $stmt->execute([$title, $image_path, $category]);
+
+            // Validate file type and extension
+            $file_type = mime_content_type($_FILES['image']['tmp_name']);
+            $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'webp'];
+
+            if (in_array($file_type, $allowed_types) && in_array($ext, $allowed_exts)) {
+                // Sanitize filename
+                $orig_name = preg_replace('/[^a-zA-Z0-9._-]/', '', basename($_FILES['image']['name']));
+                $file_name = time() . '_' . $orig_name;
+                $target_file = $upload_dir . $file_name;
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $stmt = $db->prepare("INSERT INTO gallery (title, image_path, category) VALUES (?, ?, ?)");
+                    $stmt->execute([$title, $image_path, $category]);
+                    $_SESSION['success'] = 'Image added successfully.';
+                }
+            } else {
+                $_SESSION['error'] = 'Invalid file type uploaded.';
             }
         }
     } elseif (isset($_POST['action']) && $_POST['action'] === 'delete') {
@@ -41,12 +56,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
-            $file_name = time() . '_' . basename($_FILES['image']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-                $image_path = 'images/site/gallery_uploads/' . $file_name;
-                $image_query_part = ", image_path = ?";
-                $params[] = $image_path;
+
+            // Validate file type and extension
+            $file_type = mime_content_type($_FILES['image']['tmp_name']);
+            $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
+            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowed_exts = ['jpg', 'jpeg', 'png', 'webp'];
+
+            if (in_array($file_type, $allowed_types) && in_array($ext, $allowed_exts)) {
+                // Sanitize filename
+                $orig_name = preg_replace('/[^a-zA-Z0-9._-]/', '', basename($_FILES['image']['name']));
+                $file_name = time() . '_' . $orig_name;
+                $target_file = $upload_dir . $file_name;
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+                    $image_path = 'images/site/gallery_uploads/' . $file_name;
+                    $image_query_part = ", image_path = ?";
+                    $params[] = $image_path;
+                }
+            } else {
+                $_SESSION['error'] = 'Invalid file type uploaded.';
+                // Redirect immediately to prevent executing the update query if the file upload is invalid
+                header("Location: gallery.php");
+                exit;
             }
         }
         
@@ -54,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $stmt = $db->prepare("UPDATE gallery SET title = ?, category = ? $image_query_part WHERE id = ?");
         $stmt->execute($params);
+        $_SESSION['success'] = 'Image updated successfully.';
     }
 }
 

@@ -1,0 +1,4 @@
+## 2024-05-24 - [CRITICAL] Insecure File Upload in Gallery Admin
+**Vulnerability:** The `admin/gallery.php` script allows uploading files without validating their MIME type or file extension. Only a simple `move_uploaded_file` is used. This allows an attacker to upload arbitrary files, such as malicious PHP scripts (RCE vulnerability).
+**Learning:** This existed because file validation logic was missing for standard image uploads in this specific file, whereas other parts of the admin panel (like background uploads in team.php) had some validation. Always assume all file uploads are untrusted.
+**Prevention:** Always validate both the file extension against a strict allowlist (e.g., `['jpg', 'jpeg', 'png', 'webp']`) and the MIME type using `mime_content_type()` before calling `move_uploaded_file()`. Also, sanitize filenames to prevent path traversal.
