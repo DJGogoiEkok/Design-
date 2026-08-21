@@ -247,9 +247,6 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       <div class="eyebrow">Behind The Scenes</div>
     <div class="slider-gallery-container reveal">
       <div class="slider-3d-wrapper">
-        <!-- Torn Paper Overlay -->
-        <div class="torn-overlay"></div>
-        
         <!-- Main Photo Frame -->
         <div class="slider-frame">
           <!-- Slider Track -->
@@ -313,29 +310,12 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   background: #fff; /* White background behind the torn paper */
 }
 
-/* Torn Overlay */
-.torn-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('images/torn_original.png');
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  mix-blend-mode: multiply;
-  z-index: 5;
-  pointer-events: none; /* allow clicking photos underneath if needed */
-}
-
 /* Base Frame (replaces old .slider-frame to act as photo container) */
 .slider-frame {
   position: relative;
   z-index: 1;
   width: 100%;
   height: 100%;
-  padding: 60px 100px; /* inset the photos so they don't clip the red paper edges */
   display: flex;
   flex-direction: column;
 }
