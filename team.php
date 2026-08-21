@@ -247,15 +247,11 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       <div class="eyebrow">Behind The Scenes</div>
     <div class="slider-gallery-container reveal">
       <div class="slider-3d-wrapper">
-        <!-- Animated Blob Background -->
-        <div class="slider-blob"></div>
+        <!-- Torn Paper Overlay -->
+        <div class="torn-overlay"></div>
         
-        <!-- Main 3D Frame -->
+        <!-- Main Photo Frame -->
         <div class="slider-frame">
-          <!-- Decorative Quotes -->
-          <div class="slider-quote quote-top">“</div>
-          <div class="slider-quote quote-bottom">”</div>
-
           <!-- Slider Track -->
           <div class="slider-track">
             <?php foreach ($gallery_photos as $index => $photo): ?>
@@ -302,14 +298,14 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 <style>
 .gallery-section { 
   padding: 80px 0 120px 0; 
-  background: #fdfbf2; 
-  color: #333; 
+  background: #ea3834; 
+  color: #fff; 
   overflow: hidden;
 }
-.gallery-section .section-title h2 { color: #333; }
-.gallery-section .section-title .eyebrow { color: #dcb345; }
+.gallery-section .section-title h2 { color: #fff; }
+.gallery-section .section-title .eyebrow { color: #ffeb3b; }
 
-/* ═══════════ GALLERY — 3D SLIDER ═══════════ */
+/* ═══════════ GALLERY — TORN PAPER SLIDER ═══════════ */
 .slider-gallery-container {
   display: flex;
   justify-content: center;
@@ -326,57 +322,34 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #fff; /* White background behind the torn paper */
 }
 
-/* Organic Blob Background */
-.slider-blob {
+/* Torn Overlay */
+.torn-overlay {
   position: absolute;
-  width: 130%;
-  height: 130%;
-  background: #fcd55c;
-  top: -15%;
-  left: -15%;
-  z-index: 0;
-  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  animation: blobMorph 8s infinite alternate ease-in-out;
-  box-shadow: 10px 10px 30px rgba(252, 213, 92, 0.4);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/torn_frame.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 5;
+  pointer-events: none; /* allow clicking photos underneath if needed */
 }
 
-@keyframes blobMorph {
-  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-  100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%; }
-}
-
-/* 3D Frame */
+/* Base Frame (replaces old .slider-frame to act as photo container) */
 .slider-frame {
   position: relative;
   z-index: 1;
-  background: #ffffff;
-  border-radius: 40px;
-  box-shadow: 
-    -15px -15px 25px rgba(255,255,255,0.9),
-    20px 20px 40px rgba(0,0,0,0.1),
-    inset -5px -5px 15px rgba(0,0,0,0.02);
   width: 100%;
   height: 100%;
-  padding: 40px;
+  padding: 60px 100px; /* inset the photos so they don't clip the red paper edges */
   display: flex;
   flex-direction: column;
 }
-
-/* Quotes */
-.slider-quote {
-  position: absolute;
-  font-family: Georgia, serif;
-  font-size: 80px;
-  font-weight: bold;
-  color: #fcd55c;
-  line-height: 1;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  z-index: 2;
-}
-.quote-top { top: 20px; left: 30px; }
-.quote-bottom { bottom: 0px; right: 30px; }
 
 /* Track & Slides */
 .slider-track {
