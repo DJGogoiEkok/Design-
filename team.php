@@ -286,12 +286,12 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 <style>
 .gallery-section { 
   padding: 80px 0 120px 0; 
-  background: #ea3834; 
-  color: #fff; 
+  background: #fdfbf2; 
+  color: #333; 
   overflow: hidden;
 }
-.gallery-section .section-title h2 { color: #fff; }
-.gallery-section .section-title .eyebrow { color: #ffeb3b; }
+.gallery-section .section-title h2 { color: #333; }
+.gallery-section .section-title .eyebrow { color: #dcb345; }
 
 /* ═══════════ GALLERY — TORN PAPER SLIDER ═══════════ */
 .slider-gallery-container {
