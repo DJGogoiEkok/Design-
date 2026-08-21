@@ -245,29 +245,42 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   <div class="container">
     <div class="section-title reveal">
       <div class="eyebrow">Behind The Scenes</div>
-      <h2>Our Team At Work</h2>
-    </div>
+    <div class="slider-gallery-container reveal">
+      <div class="slider-3d-wrapper">
+        <!-- Animated Blob Background -->
+        <div class="slider-blob"></div>
+        
+        <!-- Main 3D Frame -->
+        <div class="slider-frame">
+          <!-- Decorative Quotes -->
+          <div class="slider-quote quote-top">“</div>
+          <div class="slider-quote quote-bottom">”</div>
 
-    <div class="photo-collage-container reveal">
-      <div class="photo-collage-wrapper">
-        <?php 
-          $total = count($gallery_photos);
-          $center_idx = floor(($total - 1) / 2); // Find the exact middle index
-        ?>
-        <?php foreach ($gallery_photos as $index => $photo): ?>
-          <?php 
-            $distance = abs($index - $center_idx);
-            $z_index = 20 - $distance;
-            
-            if ($distance == 0) $size_class = 'frame-lg';
-            elseif ($distance == 1) $size_class = 'frame-md';
-            elseif ($distance == 2) $size_class = 'frame-sm';
-            else $size_class = 'frame-xs';
-          ?>
-          <div class="collage-frame <?php echo $size_class; ?>" style="z-index: <?php echo $z_index; ?>;" data-index="<?php echo $index; ?>">
-            <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
+          <!-- Slider Track -->
+          <div class="slider-track">
+            <?php foreach ($gallery_photos as $index => $photo): ?>
+              <div class="slider-slide <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>">
+                <div class="slider-img-wrapper">
+                  <img src="<?php echo htmlspecialchars($photo['photo_image']); ?>" alt="<?php echo htmlspecialchars($photo['photo_label']); ?>" class="gallery-photo-zoomable" data-zoom-src="<?php echo htmlspecialchars($photo['photo_image']); ?>" data-label="<?php echo htmlspecialchars($photo['photo_label']); ?>">
+                </div>
+                <?php if (!empty($photo['photo_label'])): ?>
+                  <p class="slider-label"><?php echo htmlspecialchars($photo['photo_label']); ?></p>
+                <?php endif; ?>
+              </div>
+            <?php endforeach; ?>
           </div>
-        <?php endforeach; ?>
+
+          <!-- Controls -->
+          <button class="slider-nav slider-prev" aria-label="Previous">&larr;</button>
+          <button class="slider-nav slider-next" aria-label="Next">&rarr;</button>
+          
+          <!-- Dots -->
+          <div class="slider-dots">
+            <?php foreach ($gallery_photos as $index => $photo): ?>
+              <button class="slider-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>"></button>
+            <?php endforeach; ?>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -288,71 +301,184 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 
 <style>
 .gallery-section { 
-  padding: 80px 0 160px 0; 
-  background: linear-gradient(to bottom, #f9f9f9 0%, #e0e0e0 50%, #888888 100%); 
+  padding: 80px 0 120px 0; 
+  background: #fdfbf2; 
   color: #333; 
   overflow: hidden;
 }
 .gallery-section .section-title h2 { color: #333; }
-.gallery-section .section-title .eyebrow { color: #777; }
+.gallery-section .section-title .eyebrow { color: #dcb345; }
 
-/* ═══════════ GALLERY — PHOTO COLLAGE ═══════════ */
-.photo-collage-container {
+/* ═══════════ GALLERY — 3D SLIDER ═══════════ */
+.slider-gallery-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 60px;
+  min-height: 600px;
 }
 
-.photo-collage-wrapper {
+.slider-3d-wrapper {
+  position: relative;
+  width: 500px;
+  height: 500px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  position: relative;
+  align-items: center;
 }
 
-.collage-frame {
-  background: #fff;
-  padding: 10px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-  -webkit-box-reflect: below 2px linear-gradient(transparent 75%, rgba(255,255,255,0.4));
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
+/* Organic Blob Background */
+.slider-blob {
+  position: absolute;
+  width: 130%;
+  height: 130%;
+  background: #fcd55c;
+  top: -15%;
+  left: -15%;
+  z-index: 0;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: blobMorph 8s infinite alternate ease-in-out;
+  box-shadow: 10px 10px 30px rgba(252, 213, 92, 0.4);
 }
 
-.collage-frame img {
+@keyframes blobMorph {
+  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  100% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%; }
+}
+
+/* 3D Frame */
+.slider-frame {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  border-radius: 40px;
+  box-shadow: 
+    -15px -15px 25px rgba(255,255,255,0.9),
+    20px 20px 40px rgba(0,0,0,0.1),
+    inset -5px -5px 15px rgba(0,0,0,0.02);
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Quotes */
+.slider-quote {
+  position: absolute;
+  font-family: Georgia, serif;
+  font-size: 80px;
+  font-weight: bold;
+  color: #fcd55c;
+  line-height: 1;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+.quote-top { top: 20px; left: 30px; }
+.quote-bottom { bottom: 0px; right: 30px; }
+
+/* Track & Slides */
+.slider-track {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.slider-slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  transform: translateX(50px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.slider-slide.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.slider-img-wrapper {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.slider-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #222;
-  display: block;
 }
 
-.frame-lg { width: 340px; height: 340px; margin: 0 -40px; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
-.frame-md { width: 280px; height: 280px; margin: 0 -30px; }
-.frame-sm { width: 220px; height: 220px; margin: 0 -20px; }
-.frame-xs { width: 160px; height: 160px; margin: 0 -15px; }
+.slider-label {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: 0;
+  white-space: nowrap;
+}
 
-.collage-frame:hover {
-  transform: translateY(-20px) scale(1.05);
-  z-index: 50 !important;
+/* Controls */
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  font-size: 24px;
+  color: #333;
   cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
 }
+.slider-nav:hover { background: #fcd55c; color: #fff; transform: translateY(-50%) scale(1.1); }
+.slider-prev { left: -25px; }
+.slider-next { right: -25px; }
 
-/* Mobile */
-@media (max-width: 900px) {
-  .frame-lg { width: 240px; height: 240px; margin: 0 -20px; }
-  .frame-md { width: 180px; height: 180px; margin: 0 -15px; }
-  .frame-sm { width: 140px; height: 140px; margin: 0 -10px; }
-  .frame-xs { width: 100px; height: 100px; margin: 0 -5px; }
+/* Dots */
+.slider-dots {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
 }
+.slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.slider-dot.active { background: #fcd55c; transform: scale(1.2); }
 
-@media (max-width: 600px) {
-  .frame-lg { width: 180px; height: 180px; margin: 0 -15px; }
-  .frame-md { width: 140px; height: 140px; margin: 0 -10px; }
-  .frame-sm { width: 100px; height: 100px; margin: 0 -5px; }
-  .frame-xs { width: 70px; height: 70px; margin: 0 -3px; }
-  .collage-frame { padding: 5px; }
+@media (max-width: 768px) {
+  .slider-3d-wrapper { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; }
+  .slider-frame { padding: 20px; border-radius: 20px; }
+  .slider-quote { font-size: 50px; }
+  .quote-top { top: 10px; left: 15px; }
+  .quote-bottom { bottom: 0px; right: 15px; }
 }
 </style>
 
@@ -362,8 +488,42 @@ var galleryData = <?php echo json_encode($gallery_photos); ?>;
 
 // Run on load
 document.addEventListener('DOMContentLoaded', function() {
+  initSlider();
   initGalleryZoom();
 });
+
+function initSlider() {
+  const slides = document.querySelectorAll('.slider-slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  const prevBtn = document.querySelector('.slider-prev');
+  const nextBtn = document.querySelector('.slider-next');
+  let currentSlide = 0;
+
+  function goToSlide(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    
+    currentSlide = index;
+    
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+  
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goToSlide(index));
+  });
+
+  // Optional: Auto-play
+  setInterval(() => {
+    goToSlide(currentSlide + 1);
+  }, 4000);
+}
 
 // Gallery zoom functionality
 function initGalleryZoom() {
