@@ -306,7 +306,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
+  background: transparent;
 }
 
 /* Base Frame (replaces old .slider-frame to act as photo container) */
@@ -325,7 +325,6 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   flex-grow: 1;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
 }
 
 .slider-slide {
@@ -361,9 +360,6 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 .slider-img-wrapper {
   width: 100%;
   height: 100%;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 
 .slider-slide img {
