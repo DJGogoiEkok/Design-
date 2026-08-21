@@ -276,9 +276,12 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
           
           <!-- Dots -->
           <div class="slider-dots">
-            <?php foreach ($gallery_photos as $index => $photo): ?>
-              <button class="slider-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>"></button>
-            <?php endforeach; ?>
+            <?php 
+              $totalPairs = ceil(count($gallery_photos) / 2);
+              for ($i = 0; $i < $totalPairs; $i++): 
+            ?>
+              <button class="slider-dot <?php echo $i === 0 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>"></button>
+            <?php endfor; ?>
           </div>
         </div>
       </div>
@@ -320,8 +323,9 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 
 .slider-3d-wrapper {
   position: relative;
-  width: 500px;
-  height: 500px;
+  width: 900px;
+  max-width: 95vw;
+  height: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -383,24 +387,51 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   flex-grow: 1;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   border-radius: 20px;
 }
 
 .slider-slide {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  width: calc(50% - 10px);
+  height: 100%;
   opacity: 0;
-  transform: translateX(50px) scale(0.95);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+  transform: translateX(50px) scale(0.95);
 }
 
-.slider-slide.active {
+.slider-slide[data-pos="left"] {
+  left: 0;
   opacity: 1;
   transform: translateX(0) scale(1);
   pointer-events: auto;
+}
+
+.slider-slide[data-pos="right"] {
+  left: calc(50% + 10px);
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.slider-slide[data-pos="center"] {
+  left: calc(25% + 5px);
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.slider-slide[data-pos="hidden-left"] {
+  left: 0;
+  opacity: 0;
+  transform: translateX(-50px) scale(0.95);
+}
+
+.slider-slide[data-pos="hidden-right"] {
+  left: calc(50% + 10px);
+  opacity: 0;
+  transform: translateX(50px) scale(0.95);
 }
 
 .slider-img-wrapper {
@@ -474,7 +505,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 .slider-dot.active { background: #fcd55c; transform: scale(1.2); }
 
 @media (max-width: 768px) {
-  .slider-3d-wrapper { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; }
+  .slider-3d-wrapper { width: 95vw; height: 60vw; max-height: 400px; }
   .slider-frame { padding: 20px; border-radius: 20px; }
   .slider-quote { font-size: 50px; }
   .quote-top { top: 10px; left: 15px; }
@@ -497,32 +528,51 @@ function initSlider() {
   const dots = document.querySelectorAll('.slider-dot');
   const prevBtn = document.querySelector('.slider-prev');
   const nextBtn = document.querySelector('.slider-next');
-  let currentSlide = 0;
+  let currentSlide = 0; // index of the first active slide (even number)
+  const totalPairs = Math.ceil(slides.length / 2);
 
-  function goToSlide(index) {
-    if (index < 0) index = slides.length - 1;
-    if (index >= slides.length) index = 0;
+  function goToSlide(pairIndex) {
+    if (pairIndex < 0) pairIndex = totalPairs - 1;
+    if (pairIndex >= totalPairs) pairIndex = 0;
     
-    slides[currentSlide].classList.remove('active');
-    dots[currentSlide].classList.remove('active');
+    currentSlide = pairIndex * 2;
     
-    currentSlide = index;
-    
-    slides[currentSlide].classList.add('active');
-    dots[currentSlide].classList.add('active');
+    slides.forEach((s, idx) => {
+      if (idx === currentSlide) {
+        if (!slides[currentSlide + 1]) {
+           s.dataset.pos = "center";
+        } else {
+           s.dataset.pos = "left";
+        }
+      } else if (idx === currentSlide + 1) {
+        s.dataset.pos = "right";
+      } else if (idx < currentSlide) {
+        s.dataset.pos = "hidden-left";
+      } else {
+        s.dataset.pos = "hidden-right";
+      }
+    });
+
+    dots.forEach((d, idx) => {
+      if (idx === pairIndex) d.classList.add('active');
+      else d.classList.remove('active');
+    });
   }
 
-  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+  prevBtn.addEventListener('click', () => goToSlide(Math.floor(currentSlide / 2) - 1));
+  nextBtn.addEventListener('click', () => goToSlide(Math.floor(currentSlide / 2) + 1));
   
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => goToSlide(index));
   });
 
+  // Initialize
+  goToSlide(0);
+
   // Optional: Auto-play
   setInterval(() => {
-    goToSlide(currentSlide + 1);
-  }, 4000);
+    goToSlide(Math.floor(currentSlide / 2) + 1);
+  }, 5000);
 }
 
 // Gallery zoom functionality
