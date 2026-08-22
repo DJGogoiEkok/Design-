@@ -304,7 +304,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   position: relative;
   width: 100%;
   max-width: 100vh; /* Increased frame size */
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 891 / 829;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -318,7 +318,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('images/torn_hole_transparent.png');
+  background-image: url('images/torn_perfect.png');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
