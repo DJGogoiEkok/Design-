@@ -247,6 +247,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
       <div class="eyebrow">Behind The Scenes</div>
     <div class="slider-gallery-container reveal">
       <div class="slider-3d-wrapper">
+        <div class="torn-overlay"></div>
         <!-- Main Photo Frame -->
         <div class="slider-frame">
           <!-- Slider Track -->
@@ -301,12 +302,29 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
 
 .slider-3d-wrapper {
   position: relative;
-  width: 100vw;
-  height: 90vh; /* Scale perfectly to the user's screen */
+  width: 100%;
+  max-width: 90vh;
+  aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
   background: transparent;
+  margin: 0 auto;
+}
+
+.torn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('images/new_torn.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: multiply;
+  z-index: 5;
+  pointer-events: none;
 }
 
 /* Base Frame (replaces old .slider-frame to act as photo container) */
@@ -315,6 +333,7 @@ $gallery_bg_image = $gallery_bg_is_video ? '' : $gallery_bg_path;
   z-index: 1;
   width: 100%;
   height: 100%;
+  padding: 20%; /* Keep photos inside the torn hole */
   display: flex;
   flex-direction: column;
 }
